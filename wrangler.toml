@@ -5,3 +5,6 @@ compatibility_date = "2026-10-25"
 # Serve the dashboard Worker on a workers.dev subdomain.
 workers_dev = true
 
+[assets]
+directory = "./assets"
+
