@@ -208,3 +208,101 @@ button:focus-visible,[role=button]:focus-visible,[tabindex="0"]:focus-visible{ou
 @media(max-height:900px) and (min-width:1251px){#home .homeStatus{padding:10px}#home .score.scoreCompact{width:78px;height:78px}#home .score.scoreCompact strong{font-size:24px}#home .scoreFactors{margin-top:5px}#home .homeForecastDay{min-height:118px}#climate .floorPlanCanvas{width:min(100%,620px)}#climate .climateMetricChart{height:190px!important}}
 @media(max-width:900px){#climate .climateOverview{grid-template-columns:1fr}#climate .floorPlanCanvas{width:min(100%,700px)}#climate .climateChartGrid{grid-template-columns:1fr;grid-template-areas:"temp" "stats"}#home .homeForecastDay{min-height:126px}}
 @media(max-width:650px){#climate .floorPlanCanvas{width:100%;min-height:180px;max-height:none}#climate .climateMetricChart{height:210px!important}#home .homeForecastDay{min-height:125px}}
+
+/* Fit primary dashboards into a desktop viewport without hiding their data. */
+@media(min-width:1251px) and (min-height:620px){
+  .shell{height:100dvh;min-height:0;padding:8px 12px 8px 210px;overflow:hidden}
+  .mainApp{height:100%;max-width:none;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#35516e transparent}
+  .mainApp>header{top:0;min-height:48px;padding:5px 10px;border-radius:13px}
+  .headerLogo{width:32px;height:32px;font-size:17px}
+  .headerActions{gap:5px}.headerActions .btn,.headerActions .input,.avatar{min-height:34px;height:34px}
+  .view{padding-top:6px}.pageHeading{margin:0 0 6px;min-height:38px;align-items:center}
+  .pageHeading h1{font-size:22px;margin:0}.pageHeading p,.pageHeading .eyebrow{display:none}
+  .pageHeadingActions .btn,.freshness,.weatherLocation,.weatherDate{min-height:32px;padding:6px 9px;font-size:11px}
+  .glass{border-radius:15px}
+  #home .homeLayout{gap:7px;grid-template-columns:repeat(12,minmax(0,1fr))}
+  #home .homeStatus{grid-column:span 6;padding:8px 10px}
+  #home .homeStatusMain{grid-template-columns:64px minmax(0,1fr);gap:8px}
+  #home .score.scoreCompact{width:62px;height:62px}#home .score.scoreCompact:after{inset:5px}#home .score.scoreCompact strong{font-size:20px}
+  #home .homeStatusText h2{font-size:16px;margin:2px 0}#home .homeStatusText p{font-size:10px;margin:2px 0}
+  #home .scoreFactors{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:5px}
+  #home .scoreTile{min-height:0;padding:4px 6px}#home .scoreTile strong{font-size:13px}#home .scoreTile small{font-size:9px}
+  #home .alertCenter{grid-column:span 6;padding:7px 9px;gap:6px;grid-template-columns:110px 1fr}
+  #home .alertCenter .sectionTitle h2{font-size:13px}#home .eventList{gap:4px}#home .eventRow{padding:5px 6px;gap:4px}
+  #home .eventRow p{font-size:9px;line-height:1.2;margin:2px 0}#home .eventAction{min-height:25px;padding:3px 5px;font-size:9px}
+  #home .homeSnapshots{grid-column:1/-1}#home .snapshotGrid{gap:6px}
+  #home .snapshotCard{min-height:0;padding:7px 9px}#home .snapshotCard h3{font-size:11px;margin:2px 0 4px}
+  #home .snapshotPrimary{font-size:19px;margin:3px 0}#home .snapshotSecondary,#home .snapshotFoot{font-size:9px;line-height:1.2;margin-top:3px}
+  #home .homeMiniChart{height:22px;margin-top:2px}
+  #home .forecastSection{grid-column:span 6}#home .devicesSection{grid-column:span 3}#home .recommendationsSection{grid-column:span 3}
+  #home .alertCenter,#home .forecastSection,#home .devicesSection,#home .recommendationsSection{padding:8px}
+  #home .homeForecast{gap:3px}#home .homeForecastDay{min-height:0;padding:5px 3px}
+  #home .homeForecastDay .forecastIcon{font-size:16px;margin:1px 0}#home .homeForecastDay strong,#home .homeForecastDay>div{font-size:9px}
+  #home .homeForecastDay small{font-size:8px;line-height:1.15}#home .deviceCounts{gap:3px}#home .countCard{padding:5px}
+  #home .countCard b{font-size:13px}#home .deviceAttentionRow,#home .recommendationRow{padding:5px;gap:4px}
+  #home .deviceAttentionRow p,#home .recommendationRow p{font-size:9px;line-height:1.15;margin:2px 0}
+
+  #climate .climateSummary{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:4px 0}
+  #climate .climateMetric{min-height:48px;padding:5px 8px}#climate .climateMetric strong{font-size:16px;margin:1px 0}
+  #climate .climateMetric span{font-size:10px}#climate .climateMetric small{font-size:9px}
+  #climate .climateWorkspace{gap:6px;margin-top:5px}
+  #climate .climateOverview{grid-template-columns:minmax(0,1.2fr) minmax(250px,.8fr);gap:6px}
+  #climate .floorPlanPanel,#climate .roomListPanel,#climate .climateRecommendationPanel{padding:7px}
+  #climate .floorPlanPanel h2,#climate .roomListPanel h2,#climate .climateRecommendationPanel h2{font-size:14px;margin:1px 0}
+  #climate .floorPlanCanvas{width:min(100%,460px);aspect-ratio:2/1}
+  #climate .floorPlanPanel .sectionTitle{margin-bottom:3px}
+  #climate .floorPlanMetric button{padding:4px 6px;font-size:9px}
+  #climate .planLegend{margin:2px 0;font-size:9px}#climate .planLegend i{height:6px;width:52px}
+  #climate .floorPlanPanel .chartMeta{font-size:9px;margin:2px 0}
+  #climate .climateRightColumn{grid-template-rows:minmax(0,1fr) auto;gap:5px}
+  #climate .climateRoomCards{gap:3px}#climate .climateRoomCard{min-height:0;padding:5px 7px}
+  #climate .climateRoomCard strong{font-size:11px}#climate .climateRoomCard small{font-size:9px}
+  #climate .climateChartPanel{padding:7px}#climate .climateChartPanel h2{font-size:14px}
+  #climate .climateChartPanel .sectionTitle{margin-bottom:2px}#climate .climateChartPanel .smartPeriod button{padding:4px 6px;font-size:9px}
+  #climate .climateChartPanel .metricSwitch{margin:3px 0}#climate .climateChartPanel .metricSwitch button{padding:4px 7px;font-size:10px}
+  #climate .seriesFilters{gap:4px;margin:3px 0}#climate .seriesChip{min-height:25px;padding:3px 6px!important;font-size:9px}
+  #climate .chartMeta{font-size:9px;margin:2px 0}#climate .climateChartGrid{gap:4px}
+  #climate .climateChartPanel .chartContainer .chart{height:clamp(130px,18vh,180px);min-height:0}
+  #climate .climateStats{padding:5px;font-size:10px}
+
+  #energy .energySummary{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:4px 0}
+  #energy .energyMetric{min-height:49px;padding:5px 8px}#energy .energyMetric strong{font-size:16px;margin:1px 0}
+  #energy .energyMetric span,#energy .energyMetric small{font-size:9px;margin-top:1px}
+  #energy .energyWorkspace{grid-template-columns:minmax(0,3fr) minmax(225px,.85fr);gap:6px;align-items:stretch}
+  #energy .energyMainColumn,#energy .energySidebar{gap:6px}
+  #energy .energyChartPanel,#energy .energyBottomGrid>.panel,#energy .energySidebar>.panel{padding:7px}
+  #energy .energyChartHeader h2,#energy .energySidebar h2{font-size:14px}
+  #energy .energyChartPanel .sectionTitle{margin:0}#energy .energyChartPanel .smartPeriod button{padding:4px 6px;font-size:9px}
+  #energy .energyChartControls{margin:3px 0}#energy .energyMetricSwitch button{padding:4px 7px;font-size:10px}
+  #energy .energyChartPanel .chart{height:clamp(155px,22vh,220px)}#energy .energyChartPanel .chartMeta{font-size:9px;margin:2px 0}
+  #energy .energyBottomGrid{grid-template-columns:1.4fr 1fr 1fr;gap:5px}
+  #energy .energyBottomGrid h3{font-size:11px}#energy .energyBottomGrid .sectionTitle{gap:3px}
+  #energy .tariffControls .input{min-height:26px;padding:3px;font-size:9px}#energy .tariffControls .btn{min-height:26px;padding:3px 5px;font-size:9px}
+  #energy .tariffChartWrap{height:48px}#energy .tariffTotals .item{padding:3px 4px;font-size:9px}
+  #energy .energyComparison,#energy .energyBudget{min-height:0}#energy .energySidebar .networkPills{gap:3px}
+  #energy .energySidebar .networkPill{padding:5px;font-size:9px}#energy .energySidebar .networkPill b{font-size:11px}
+  #energy .energyInsightPanel .list{gap:3px}#energy .energyInsightPanel .item{padding:5px;font-size:9px}
+
+  #weather .weatherMetrics{grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin:4px 0}
+  #weather .weatherMetric{min-height:54px;padding:5px 7px;gap:1px 5px}
+  #weather .weatherMetricIcon{font-size:18px}#weather .weatherMetric label,#weather .weatherMetric small{font-size:9px}
+  #weather .weatherMetric strong{font-size:14px}
+  #weather .weatherWorkspace{grid-template-columns:minmax(0,3.2fr) minmax(210px,.8fr);gap:6px;align-items:stretch}
+  #weather .weatherMainColumn,#weather .weatherSidebar{gap:5px}
+  #weather .weatherChartPanel,#weather .hourlySection,#weather .dailySection,#weather .weatherNow,#weather .weatherInsights{padding:7px}
+  #weather .weatherChartPanel h2,#weather .hourlySection h2,#weather .dailySection h2,#weather .weatherNow h2,#weather .weatherInsights h2{font-size:13px}
+  #weather .weatherChartPanel .sectionTitle{margin:0}#weather .weatherChartPanel .metricSwitch button{padding:4px 6px;font-size:9px}
+  #weather .weatherChartToolbar{gap:3px;margin:3px 0}#weather .weatherHorizon button{padding:4px 6px;font-size:9px}
+  #weather .weatherChartToolbar .btn{min-height:26px;padding:3px 5px;font-size:9px}
+  #weather .weatherChartPanel .chartMeta{font-size:9px}#weather .weatherChart{height:clamp(150px,21vh,210px)!important;min-height:0}
+  #weather .weatherChartPanel .chartNavigator{display:none}
+  #weather .hourlySection small{font-size:9px}#weather .hourlyItem{flex-basis:55px;min-height:0;padding:4px 3px;font-size:9px}
+  #weather .hourlyItem .hourIcon{font-size:15px}#weather .railArrow{min-height:26px}
+  #weather .forecastSummary{gap:3px;padding:2px 0}#weather .forecastDay{min-height:0;padding:4px}
+  #weather .forecastDay h2{font-size:14px;margin:3px 0}#weather .forecastDay b,#weather .forecastDay small{font-size:8px}
+  #weather .forecastDay .weatherIcon{font-size:16px}
+  #weather .weatherNow .big{font-size:24px;margin:1px 0}#weather .weatherMainIcon{font-size:18px}
+  #weather .weatherDetail{min-height:0;padding:4px}#weather .weatherDetail span,#weather .weatherDetail b{font-size:9px}
+  #weather .weatherSun,#weather .weatherNextEvent,#weather .insight{padding:5px;margin:3px 0;font-size:9px;line-height:1.25}
+  #weather .weatherWarning{padding:5px;font-size:9px}
+}
