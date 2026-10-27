@@ -124,3 +124,87 @@ button:focus-visible,[role=button]:focus-visible,[tabindex="0"]:focus-visible{ou
 #floorPlanSvg .entryMark{stroke:#62d9b0;stroke-width:4;vector-effect:non-scaling-stroke}
 #floorPlanSvg .entryLabel{fill:#62d9b0;stroke:#06121f;stroke-width:3px;paint-order:stroke;font:700 18px Inter,system-ui,sans-serif}
 @media(max-width:650px){.floorPlanCanvas{min-height:190px!important;max-height:320px!important}.floorPlanPanel{overflow:hidden}}
+
+/* Compact, readable dashboard defaults for laptop-height screens. */
+:root{--hm-room-kids:#ff9f43;--hm-room-hallway:#c77dff;--hm-room-bedroom:#43c9f4;--hm-room-kitchen:#ffab55;--hm-room-bathroom:#42d6c2}
+#home .scoreTile,#home .scoreTile * ,#home .homeForecastDay,#home .homeForecastDay strong,#home .homeForecastDay div,#home .homeForecastDay b,#home .homeForecastDay small,#home .countCard,#home .countCard *{color:var(--hm-text)!important}
+#home .homeForecastDay small,#home .scoreTile small,#home .countCard span{color:var(--hm-muted)!important}
+#home .scoreTile{background:#11233a;border-color:#294563}
+#home .homeForecastDay{background:#102239;border-color:#294563}
+#climate .climateOverview{grid-template-columns:minmax(0,1.2fr) minmax(285px,.8fr);gap:10px}
+#climate .floorPlanPanel,#climate .climateChartPanel{padding:12px}
+#climate .floorPlanCanvas{width:min(100%,700px);margin:0 auto;min-height:0;max-height:none;aspect-ratio:2/1;height:auto}
+#climate .floorPlanPanel .sectionTitle{margin-bottom:7px}
+#climate .floorPlanMetric{max-width:100%;overflow-x:auto}
+#climate .planLegend{margin:5px 0;font-size:10px}
+#climate .floorPlanPanel .chartMeta{font-size:10px;line-height:1.35;margin:3px 0}
+#climate .planActions{gap:5px}
+#climate .planActions .btn{min-height:32px;padding:5px 8px;font-size:11px}
+#climate .climateSummary{gap:7px;margin:8px 0}
+#climate .climateMetric{padding:9px 11px;min-height:68px}
+#climate .climateMetric strong{font-size:19px;margin:3px 0}
+#climate .climateChartPanel .sectionTitle{margin-bottom:6px}
+#climate .climateMetricChart{height:230px!important}
+#climate .climateChartGrid{grid-template-columns:minmax(0,1fr) minmax(180px,.35fr);grid-template-areas:"temp stats";gap:8px}
+#climate .climateChartGrid .humidityBlock{grid-area:temp}
+#climate .climateStats{padding:8px}
+#climate .chartContainer{padding:5px}
+#climate .chartNavigator{display:none}
+#climate .climateChartPanel .chartToolbar{display:none}
+#energy .energyChartPanel .chart{height:clamp(220px,32vh,320px)}
+#energy .energyChartPanel .chartNavigator{display:none}
+#energy .energyChartPanel .chartToolbar{margin:5px 0}
+#energy .energyChartPanel .chartToolbar .btn[data-chart-action]{display:none}
+#energy .energyChartPanel .chartMeta{color:#d7e4f5}
+#climate .floorPlanCanvas{cursor:default;touch-action:auto}
+#climate .floorPlanCanvas svg{cursor:pointer;touch-action:auto}
+#climate .climateChartGrid .humidityBlock{grid-area:temp}
+#climate .climateChartPanel .chartContainer .chart{height:210px;min-height:0}
+#climate .climateStats{background:#0d1d30}
+#energy .energyChartPanel .chartContainer{background:#102239}
+#energy #energyChartHint{font-size:12px}
+.forecastDay,.hourlyItem,.climateRoomCard,.deviceCard{color:var(--hm-text)}
+.forecastDay b,.forecastDay h2,.forecastDay div,.forecastDay small,.hourlyItem strong,.hourlyItem b,.hourlyItem small{color:var(--hm-text)}
+.forecastDay small,.hourlyItem small{color:var(--hm-muted)}
+.planActions .btn{color:var(--hm-text)}
+.homeLayout{gap:10px}
+.homeStatus{padding:13px}
+.homeStatusMain{grid-template-columns:96px minmax(0,1fr);gap:14px}
+.score.scoreCompact{width:92px;height:92px}
+.score.scoreCompact:after{inset:7px}
+.score.scoreCompact strong{font-size:28px}
+.homeStatusText h2{font-size:21px;margin:5px 0}
+.homeStatusText p{font-size:12px;line-height:1.35;margin:3px 0}
+.scoreExplanation,.textAction{font-size:11px}
+.scoreFactors{gap:6px;margin-top:8px}
+.scoreTile{padding:8px 10px}
+.scoreTile strong{font-size:17px;margin-top:2px}
+.scoreTile small{font-size:10px}
+.alertCenter,.forecastSection,.devicesSection,.recommendationsSection,.quickActionsSection{padding:12px}
+.eventList{gap:6px}
+.eventRow{padding:8px;gap:7px}
+.eventRow p{margin:3px 0;font-size:11px}
+.eventAction{min-height:32px;padding:5px 8px;font-size:11px}
+.homeSnapshots .snapshotGrid{gap:8px}
+.snapshotCard{padding:11px;min-height:132px}
+.snapshotPrimary{font-size:27px;margin:7px 0 4px}
+.snapshotSecondary,.snapshotFoot{font-size:11px;line-height:1.35}
+.homeMiniChart{height:48px;margin-top:5px}
+.homeForecast{gap:6px}
+.homeForecastDay{min-height:132px;padding:8px 6px}
+.homeForecastDay .forecastIcon{font-size:21px;margin:3px 0}
+.homeForecastDay strong,.homeForecastDay>div{font-size:11px}
+.homeForecastDay small{font-size:9px;line-height:1.25}
+.deviceCounts{gap:5px}
+.countCard{padding:8px}
+.countCard b{font-size:17px}
+.deviceAttentionRow{padding:7px}
+.deviceAttentionRow p{font-size:10px;margin:3px 0}
+.recommendationRow{padding:8px;gap:7px}
+.recommendationRow p{font-size:11px;line-height:1.3;margin:3px 0}
+.quickActions{gap:6px}
+.quickAction{min-height:42px;padding:7px}
+@media(min-width:1251px){#home .homeLayout{grid-template-columns:repeat(12,minmax(0,1fr));align-items:start}#home .homeStatus{grid-column:span 6}#home .alertCenter{grid-column:span 6}#home .homeSnapshots{grid-column:1/-1}#home .forecastSection{grid-column:span 8}#home .devicesSection{grid-column:span 4}#home .recommendationsSection{grid-column:1/-1}#home .quickActionsSection{display:none}#home .eventList{grid-template-columns:repeat(2,minmax(0,1fr))}#climate .floorPlanCanvas{width:min(100%,660px)}#climate .climateMetricChart{height:210px!important}}
+@media(max-height:900px) and (min-width:1251px){#home .homeStatus{padding:10px}#home .score.scoreCompact{width:78px;height:78px}#home .score.scoreCompact strong{font-size:24px}#home .scoreFactors{margin-top:5px}#home .homeForecastDay{min-height:118px}#climate .floorPlanCanvas{width:min(100%,620px)}#climate .climateMetricChart{height:190px!important}}
+@media(max-width:900px){#climate .climateOverview{grid-template-columns:1fr}#climate .floorPlanCanvas{width:min(100%,700px)}#climate .climateChartGrid{grid-template-columns:1fr;grid-template-areas:"temp" "stats"}#home .homeForecastDay{min-height:126px}}
+@media(max-width:650px){#climate .floorPlanCanvas{width:100%;min-height:180px;max-height:none}#climate .climateMetricChart{height:210px!important}#home .homeForecastDay{min-height:125px}}

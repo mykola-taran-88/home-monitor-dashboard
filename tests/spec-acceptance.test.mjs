@@ -27,15 +27,18 @@ test('spec: delivered SVG is vector-only, uses required viewBox, and includes al
   assert.doesNotMatch(styles, /aspect-ratio:1200\/760/);
   assert.match(html, /id="room-kitchen" class="svgRoom unmappedRoom" data-plan-room="4"/);
   assert.match(html, /id="room-bathroom" class="svgRoom unmappedRoom" data-plan-room="3"/);
+  assert.doesNotMatch(html, /floorPlanTools|data-plan-action/);
   assert.match(dashboard, /poly\.style\.setProperty\('fill',floorPlanColor\(d\),'important'\)/);
   assert.match(dashboard, /return value<20\?'#438dbb':value<=cfg\.temperatureMax\?'#579a7c':value<=26\?'#df9250':'#cc625a'/);
 });
 
-test('spec: climate defaults to combined 24-hour view and keeps missing samples as gaps', async () => {
+test('spec: climate defaults to a simple fixed-scale temperature graph and keeps missing samples as gaps', async () => {
   const html = await appHtml('/climate?room=room-kids');
-  assert.match(html, /data-metric="tempHumidity" class="active"/);
+  assert.match(html, /data-metric="temperature" class="active">Температура/);
   assert.match(html, /data-smart-scope="climate"><button data-p="day" class="active"/);
-  assert.match(dashboard, /showTemp=mode!=='humidity',showHum=mode!=='temperature'/);
+  assert.match(dashboard, /showTemp=mode!=='humidity',showHum=mode==='humidity'/);
+  assert.match(dashboard, /Math\.ceil\(allKeys\.length\/240\)/);
+  assert.match(dashboard, /makeChart\('climateTempChart'.*?0,40\)/s);
   assert.match(dashboard, /spanGaps:false/);
   assert.match(dashboard, /slicedKeys=timeKeys\.slice/);
   assert.match(dashboard, /keys\.indexOf\(timeKey\)/);
@@ -80,7 +83,10 @@ test('spec: energy defaults to power/day and only shows tariff bands when config
   assert.match(html, /data-smart-scope="energy2"><button data-p="day" class="active"/);
   assert.match(dashboard, /function renderChartsEnergy\(\)/);
   assert.match(dashboard, /if\(!opts\?\.configured\|\|!chart\.chartArea\|\|!chart\.scales\.x\)return/);
-  assert.match(dashboard, /stack:'energy'/);
+  assert.match(dashboard, /function hmCumulativeEnergyValues\(points\)/);
+  assert.match(dashboard, /label:'Накоплене споживання',data:hmCumulativeEnergyValues\(points\)/);
+  assert.match(dashboard, /total\+=interval;return total/);
+  assert.match(dashboard, /options\.scales\.y\.min=0/);
 });
 
 test('spec: home widgets cap events and recommendations and avoid inventing null as zero', () => {
