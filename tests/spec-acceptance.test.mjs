@@ -19,13 +19,16 @@ async function appHtml(path = '/') {
 
 test('spec: delivered SVG is vector-only, uses required viewBox, and includes all five rooms', async () => {
   const html = await appHtml('/climate');
-  assert.match(html, /<svg id="floorPlanSvg" viewBox="0 0 1200 650"/);
+  assert.match(html, /<svg id="floorPlanSvg" viewBox="0 0 1200 600"/);
   for (const id of ['room-kids', 'room-hallway', 'room-bedroom', 'room-kitchen', 'room-bathroom']) assert.match(html, new RegExp(`id="${id}"`));
   assert.doesNotMatch(html, /floor-plan\.png/);
   assert.match(html, /Немає датчика/);
-  assert.match(styles, /aspect-ratio:1200\/650/);
+  assert.match(styles, /aspect-ratio:2\/1/);
   assert.doesNotMatch(styles, /aspect-ratio:1200\/760/);
-  assert.match(dashboard, /fillOpacity=state\.floorPlanMetric==='none'\?0:d\?'.35':'.15'/);
+  assert.match(html, /id="room-kitchen" class="svgRoom unmappedRoom" data-plan-room="4"/);
+  assert.match(html, /id="room-bathroom" class="svgRoom unmappedRoom" data-plan-room="3"/);
+  assert.match(dashboard, /poly\.style\.setProperty\('fill',floorPlanColor\(d\),'important'\)/);
+  assert.match(dashboard, /return value<20\?'#438dbb':value<=cfg\.temperatureMax\?'#579a7c':value<=26\?'#df9250':'#cc625a'/);
 });
 
 test('spec: climate defaults to combined 24-hour view and keeps missing samples as gaps', async () => {
@@ -52,11 +55,11 @@ test('spec: switching history aborts prior requests and aborted requests are not
   assert.match(core, /if\(state\.activeRequests\.get\(cacheKey\)===task\)state\.activeRequests\.delete\(cacheKey\)/);
 });
 
-test('spec: climate and energy preferences persist while fullscreen/zoom remain transient', () => {
+test('spec: climate, energy, and weather preferences persist while fullscreen/zoom remain transient', () => {
   assert.match(dashboard, /localStorage\.setItem\(HM_PREF_KEY/);
   assert.match(dashboard, /climateMode:state\.chartMetrics\.climate/);
   assert.match(dashboard, /planMetric:state\.floorPlanMetric/);
-  assert.match(dashboard, /periods:\{climate:state\.smartPeriods\.climate\|\|'day',energy2:state\.smartPeriods\.energy2\|\|'day'\}/);
+  assert.match(dashboard, /periods:\{climate:state\.smartPeriods\.climate\|\|'day',energy2:state\.smartPeriods\.energy2\|\|'day',weather:state\.weatherHorizon\|\|'48h'\}/);
   assert.doesNotMatch(dashboard.match(/function hmSavePreferences\(\)[\s\S]*?\nfunction hmRestorePreferences/)?.[0] || '', /floorPlanZoom|chartViewport|fullscreen/i);
 });
 
@@ -64,7 +67,7 @@ test('spec: weather defaults to temperature plus precipitation, with probability
   const html = await appHtml('/weather?horizon=48h');
   assert.match(html, /data-wmetric="temperature" class="active">Температура \+ опади/);
   assert.match(dashboard, /y1=\{position:'right',min:0,max:100/);
-  assert.match(dashboard, /const rail=rows\.slice\(0,12\)/);
+  assert.match(dashboard, /const rail=hourlyRows\.slice\(0,12\)/);
   assert.match(dashboard, /class="hourlyItem nowHourlyItem" data-weather-index="now"/);
   assert.match(dashboard, /wind_gusts\?\?x\.wind_gust/);
   assert.match(dashboard, /hmDayNightBands/);
