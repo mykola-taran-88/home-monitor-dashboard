@@ -1,8 +1,10 @@
 {
   "name": "home-monitor-dashboard",
+  "version": "4.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "build": "node --check index.js",
+    "check": "node --check index.js"
   }
 }
