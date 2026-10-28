@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node --check src/index.js",
-    "check": "node --check src/index.js"
+    "build": "echo '=== Repository files ===' && find . -maxdepth 4 -type f -not -path './node_modules/*' -print && FILE=$(find . -type f -name 'index.js' -not -path './node_modules/*' | head -n 1) && echo \"Worker file: $FILE\" && test -n \"$FILE\" && node --check \"$FILE\"",
+    "check": "FILE=$(find . -type f -name 'index.js' -not -path './node_modules/*' | head -n 1) && test -n \"$FILE\" && node --check \"$FILE\""
   }
 }
