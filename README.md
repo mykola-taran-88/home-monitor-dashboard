@@ -49,3 +49,4 @@ Worker віддає app для `/`, `/index.html`, `/home`, `/climate`, `/energy
 Інтерфейс використовує наявні відповіді backend і не генерує випадкових sensor/device/forecast значень. Відсутні числові показники відображаються як `—`, а підтверджений нуль лишається нулем. Тарифні зони/stacked series, мережеві показники й частина погодних деталей потребують реальних полів API; відсутні поля перелічено в `docs/api-gaps.md`.
 
 Browser E2E, реальні backend payloads, permission checks і physical device accessibility не були доступні в цьому середовищі. Точний обсяг автоматичних перевірок та обмеження описані в `docs/testing-report.md`.
++
