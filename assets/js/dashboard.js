@@ -236,7 +236,20 @@ function timeAxisTicks(start, end, width) {
     }
   }
 
-  return [...new Set(values)].sort((a, b) => a - b);
+  const ordered = [...new Set(values)].sort((a, b) => a - b);
+  const chartWidth = Math.max(120, Number(width) || 500);
+  const minimumGap = ((end - start) * 58) / chartWidth;
+  const ticks = [start];
+  for (const value of ordered.slice(1, -1)) {
+    if (
+      value - ticks[ticks.length - 1] >= minimumGap &&
+      end - value >= minimumGap
+    ) {
+      ticks.push(value);
+    }
+  }
+  ticks.push(end);
+  return ticks;
 }
 
 const chartDayMarkers = {
@@ -387,7 +400,18 @@ function toast(t) {
   $("toast").style.display = "block";
   setTimeout(() => ($("toast").style.display = "none"), 2500);
 }
+function hideChartTooltips() {
+  const tooltip = document.getElementById("roomSparkTooltip");
+  if (tooltip) tooltip.style.opacity = "0";
+  Object.values(state.charts).forEach((chart) => {
+    if (!chart?.canvas) return;
+    chart.setActiveElements?.([]);
+    chart.tooltip?.setActiveElements?.([], { x: 0, y: 0 });
+    chart.update?.("none");
+  });
+}
 function showView(v) {
+  hideChartTooltips();
   document
     .querySelectorAll(".view")
     .forEach((x) => x.classList.toggle("active", x.id === v));
@@ -1526,6 +1550,10 @@ function renderRoomSparks(cards) {
           },
         },
       },
+    });
+    canvas.addEventListener("pointerleave", () => {
+      const tooltip = document.getElementById("roomSparkTooltip");
+      if (tooltip) tooltip.style.opacity = "0";
     });
   });
 }
@@ -2784,9 +2812,18 @@ $("theme").onclick = () =>
   (document.documentElement.dataset.theme =
     document.documentElement.dataset.theme === "dark" ? "light" : "dark");
 document.addEventListener("visibilitychange", () => {
+  hideChartTooltips();
   if (document.visibilityState === "visible" && state.mode !== "manual")
     loadAll(false);
 });
+window.addEventListener(
+  "scroll",
+  () => {
+    const tooltip = document.getElementById("roomSparkTooltip");
+    if (tooltip) tooltip.style.opacity = "0";
+  },
+  { passive: true },
+);
 function openLogin() {
   $("loginModal").classList.add("show");
   $("password").focus();
