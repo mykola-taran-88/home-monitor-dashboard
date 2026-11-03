@@ -211,6 +211,34 @@ function kyivCalendarDates(start, end) {
   return dates;
 }
 
+function timeAxisTicks(start, end, width) {
+  const rangeHours = Math.max(1, (end - start) / 3600000);
+  const slots = Math.max(3, Math.floor(width / 60));
+  const targetHours = rangeHours / slots;
+  const intervals = [1, 2, 3, 4, 6, 8, 12, 24, 48, 72, 168, 336, 720, 2160];
+  const intervalHours = intervals.find((hours) => hours >= targetHours) || 2160;
+  const values = [start, end];
+  const dates = kyivCalendarDates(start, end);
+
+  if (intervalHours < 24) {
+    for (const date of dates) {
+      for (let hour = 0; hour < 24; hour += intervalHours) {
+        const stamp = kyivWallTime({ ...date, hour });
+        if (stamp > start && stamp < end) values.push(stamp);
+      }
+    }
+  } else {
+    const dayStep = Math.max(1, Math.round(intervalHours / 24));
+    for (let index = 0; index < dates.length; index += 1) {
+      if (index % dayStep !== 0) continue;
+      const stamp = kyivWallTime(dates[index]);
+      if (stamp > start && stamp < end) values.push(stamp);
+    }
+  }
+
+  return [...new Set(values)].sort((a, b) => a - b);
+}
+
 const chartDayMarkers = {
   id: "chartDayMarkers",
   beforeDatasetsDraw(chart, _args, options) {
@@ -1432,8 +1460,7 @@ function renderRoomSparks(cards) {
             min: timeStart,
             max: timeEnd,
             ticks: {
-              maxTicksLimit: window.innerWidth <= 650 ? 5 : 9,
-              autoSkip: true,
+              autoSkip: false,
               maxRotation: 0,
               minRotation: 0,
               color: "#91a4c4",
@@ -1443,6 +1470,13 @@ function renderRoomSparks(cards) {
                 const local = kyivParts(Number(value));
                 return `${String(local.hour).padStart(2, "0")}:${String(local.minute).padStart(2, "0")}`;
               },
+            },
+            afterBuildTicks: (scale) => {
+              scale.ticks = timeAxisTicks(
+                timeStart,
+                timeEnd,
+                scale.width || canvas.clientWidth || 500,
+              ).map((value) => ({ value }));
             },
             grid: { display: false },
             border: { display: false },
@@ -2515,13 +2549,20 @@ function renderCharts() {
               max: xMax,
               ticks: {
                 color: "#d2deee",
-                maxTicksLimit: window.innerWidth <= 650 ? 5 : 9,
+                autoSkip: false,
                 maxRotation: 0,
                 font: { size: window.innerWidth <= 650 ? 10 : 12 },
                 callback: (v) => {
                   const local = kyivParts(Number(v));
                   return `${String(local.hour).padStart(2, "0")}:${String(local.minute).padStart(2, "0")}`;
                 },
+              },
+              afterBuildTicks: (scale) => {
+                scale.ticks = timeAxisTicks(
+                  xMin,
+                  xMax,
+                  scale.width || canvas.clientWidth || 500,
+                ).map((value) => ({ value }));
               },
               grid: { color: "#ffffff18" },
             },
