@@ -3189,6 +3189,9 @@ body {
   flex-direction: column;
 }
 .assistantHeader {
+  position: relative;
+  top: auto;
+  z-index: auto;
   min-height: 68px;
   padding: 10px 12px;
   display: flex;
