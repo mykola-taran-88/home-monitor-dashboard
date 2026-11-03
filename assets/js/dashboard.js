@@ -3164,6 +3164,141 @@ async function loadAudit() {
   }
 }
 
+function initAssistantWidget() {
+  const widget = $("assistantWidget");
+  if (!widget) return;
+  const toggle = $("assistantToggle"),
+    panel = $("assistantPanel"),
+    messagesNode = $("assistantMessages"),
+    form = $("assistantForm"),
+    input = $("assistantInput"),
+    send = $("assistantSend"),
+    storageKey = "hmAssistantConversation",
+    messagesKey = "hmAssistantMessages";
+  let conversationId = localStorage.getItem(storageKey);
+  if (!conversationId || !/^[a-f0-9-]{36}$/i.test(conversationId)) {
+    conversationId = crypto.randomUUID
+      ? crypto.randomUUID()
+      : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+          const r = (Math.random() * 16) | 0;
+          return (c === "x" ? r : (r & 3) | 8).toString(16);
+        });
+    localStorage.setItem(storageKey, conversationId);
+  }
+  let transcript = [];
+  try {
+    transcript = JSON.parse(localStorage.getItem(messagesKey) || "[]");
+  } catch {
+    transcript = [];
+  }
+  if (!Array.isArray(transcript)) transcript = [];
+  if (!transcript.length)
+    transcript.push({
+      role: "assistant",
+      text: "Вітаю! Запитай про показники дому або попроси пояснити, як вони формуються.",
+    });
+
+  const save = () => {
+      try {
+        localStorage.setItem(
+          messagesKey,
+          JSON.stringify(transcript.slice(-24)),
+        );
+      } catch {}
+    },
+    render = () => {
+      messagesNode.replaceChildren();
+      transcript.slice(-24).forEach((message) => {
+        const bubble = document.createElement("div");
+        bubble.className = `assistantMessage ${message.role === "user" ? "user" : "assistant"}${message.pending ? " pending" : ""}`;
+        bubble.textContent = message.text;
+        messagesNode.append(bubble);
+      });
+      messagesNode.scrollTop = messagesNode.scrollHeight;
+    },
+    setOpen = (open) => {
+      widget.classList.toggle("is-open", open);
+      toggle.setAttribute("aria-expanded", String(open));
+      panel.setAttribute("aria-hidden", String(!open));
+      toggle.setAttribute(
+        "aria-label",
+        open ? "Закрити AI-помічника" : "Відкрити AI-помічника",
+      );
+      if (open) setTimeout(() => input.focus(), 80);
+    };
+
+  render();
+  toggle.addEventListener("click", () =>
+    setOpen(!widget.classList.contains("is-open")),
+  );
+  $("assistantClose").addEventListener("click", () => setOpen(false));
+  $("assistantClear").addEventListener("click", async () => {
+    try {
+      const response = await fetch("/assistant/chat/clear", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ conversationId }),
+      });
+      if (!response.ok) throw new Error("Не вдалося очистити історію чату.");
+      transcript = [{ role: "assistant", text: "Чат очищено. Чим допомогти?" }];
+      save();
+      render();
+    } catch (error) {
+      transcript.push({
+        role: "assistant",
+        text: error.message || "Не вдалося очистити чат.",
+      });
+      save();
+      render();
+    }
+  });
+  document.querySelectorAll("[data-assistant-prompt]").forEach((button) =>
+    button.addEventListener("click", () => {
+      input.value = button.dataset.assistantPrompt;
+      form.requestSubmit();
+    }),
+  );
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      form.requestSubmit();
+    }
+  });
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const message = input.value.trim();
+    if (!message || send.disabled) return;
+    transcript.push({ role: "user", text: message });
+    const pending = { role: "assistant", text: "Думаю…", pending: true };
+    transcript.push(pending);
+    input.value = "";
+    send.disabled = true;
+    save();
+    render();
+    try {
+      const response = await fetch("/assistant/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ conversationId, message }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok)
+        throw new Error(result.error || "Не вдалося отримати відповідь.");
+      pending.text = String(result.answer || "Не отримав текстової відповіді.");
+      delete pending.pending;
+    } catch (error) {
+      pending.text =
+        error.message || "З’єднання з помічником перервано. Спробуй ще раз.";
+      delete pending.pending;
+    } finally {
+      send.disabled = false;
+      save();
+      render();
+      input.focus();
+    }
+  });
+}
+
 setupPeriods();
 setupTimelineFilters();
 setupSmartPeriods();
@@ -3209,3 +3344,4 @@ document.addEventListener("keydown", (e) => {
 checkSession();
 schedule();
 loadAll(true);
+initAssistantWidget();

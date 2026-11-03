@@ -663,6 +663,97 @@
         </div>
       </div>
     </div>
+    <section
+      id="assistantWidget"
+      class="assistantWidget"
+      aria-label="AI-помічник дому"
+    >
+      <button
+        id="assistantToggle"
+        class="assistantToggle"
+        type="button"
+        aria-label="Відкрити AI-помічника"
+        aria-expanded="false"
+      >
+        <img src="/assets/assistant-emblem.jpg" alt="" />
+      </button>
+      <div id="assistantPanel" class="assistantPanel glass" aria-hidden="true">
+        <header class="assistantHeader">
+          <div class="assistantTitle">
+            <img src="/assets/assistant-emblem.jpg" alt="" />
+            <span
+              ><b>AI-помічник</b
+              ><small>Дані й довідка Home Monitor</small></span
+            >
+          </div>
+          <div class="assistantHeaderActions">
+            <button
+              id="assistantClear"
+              class="assistantIconButton"
+              type="button"
+              aria-label="Очистити чат"
+              title="Очистити чат"
+            >
+              ↺
+            </button>
+            <button
+              id="assistantClose"
+              class="assistantIconButton"
+              type="button"
+              aria-label="Закрити чат"
+            >
+              ×
+            </button>
+          </div>
+        </header>
+        <div
+          id="assistantMessages"
+          class="assistantMessages"
+          aria-live="polite"
+        ></div>
+        <div class="assistantSuggestions" aria-label="Приклади запитань">
+          <button
+            type="button"
+            data-assistant-prompt="Які зараз показники температури та вологості в кімнатах?"
+          >
+            Клімат
+          </button>
+          <button
+            type="button"
+            data-assistant-prompt="Поясни споживання електроенергії за сьогодні"
+          >
+            Енергія
+          </button>
+          <button
+            type="button"
+            data-assistant-prompt="Що означають показники на головному екрані?"
+          >
+            Довідка
+          </button>
+        </div>
+        <form id="assistantForm" class="assistantForm">
+          <textarea
+            id="assistantInput"
+            rows="1"
+            maxlength="1200"
+            placeholder="Запитай про показники або роботу дому…"
+            aria-label="Повідомлення AI-помічнику"
+          ></textarea>
+          <button
+            id="assistantSend"
+            class="assistantSend"
+            type="submit"
+            aria-label="Надіслати повідомлення"
+          >
+            ➤
+          </button>
+        </form>
+        <small class="assistantFootnote"
+          >Відповідає тим самим AI, що й бот. Чутливі налаштування не
+          передаються.</small
+        >
+      </div>
+    </section>
     <div class="toast" id="toast"></div>
     <script src="/js/dashboard.js" defer></script>
   </body>

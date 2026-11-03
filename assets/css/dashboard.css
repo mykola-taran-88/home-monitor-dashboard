@@ -3137,6 +3137,213 @@ body {
     font-size: 8px;
   }
 }
+
+/* Floating Home Monitor AI assistant */
+.assistantWidget {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 95;
+  font-size: 14px;
+}
+.assistantToggle {
+  width: 64px;
+  height: 64px;
+  padding: 4px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #72e7ff99;
+  border-radius: 50%;
+  color: var(--text);
+  background: linear-gradient(145deg, #14243a, #091222);
+  box-shadow:
+    0 8px 30px #0009,
+    0 0 20px #58e1ff30;
+  cursor: pointer;
+}
+.assistantToggle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.assistantPanel {
+  position: absolute;
+  right: 0;
+  bottom: 78px;
+  width: min(390px, calc(100vw - 28px));
+  height: min(620px, calc(100dvh - 145px));
+  min-height: 340px;
+  display: none;
+  overflow: hidden;
+  border: 1px solid #58e1ff66;
+  border-radius: 20px;
+  background: linear-gradient(155deg, #111f35f7, #080f1df7);
+  box-shadow:
+    0 24px 75px #000b,
+    0 0 35px #58e1ff14;
+  backdrop-filter: blur(24px);
+}
+.assistantWidget.is-open .assistantPanel {
+  display: flex;
+  flex-direction: column;
+}
+.assistantHeader {
+  min-height: 68px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.assistantTitle,
+.assistantHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.assistantTitle img {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border: 1px solid #72e7ff88;
+  border-radius: 50%;
+}
+.assistantTitle span {
+  display: grid;
+  gap: 2px;
+}
+.assistantTitle small,
+.assistantFootnote {
+  color: var(--muted);
+  font-size: 10px;
+}
+.assistantIconButton,
+.assistantSend {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--text);
+  background: #ffffff0a;
+  cursor: pointer;
+  font-size: 20px;
+}
+.assistantMessages {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+.assistantMessage {
+  max-width: 90%;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  color: var(--text);
+  background: #ffffff0a;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.assistantMessage.user {
+  align-self: flex-end;
+  border-color: #58e1ff66;
+  background: #58e1ff17;
+}
+.assistantMessage.assistant {
+  align-self: flex-start;
+}
+.assistantMessage.pending {
+  color: var(--muted);
+}
+.assistantSuggestions {
+  padding: 0 10px 8px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.assistantSuggestions button {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: #ffffff08;
+  cursor: pointer;
+  font-size: 11px;
+}
+.assistantSuggestions button:hover {
+  color: var(--text);
+  border-color: var(--a);
+}
+.assistantForm {
+  margin: 0 10px;
+  padding: 6px;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #050b16aa;
+}
+.assistantForm textarea {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-height: 110px;
+  resize: vertical;
+  padding: 7px;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+}
+.assistantForm textarea::placeholder {
+  color: var(--muted);
+}
+.assistantSend {
+  flex: 0 0 auto;
+  color: #06111d;
+  background: var(--a);
+  font-size: 16px;
+}
+.assistantSend:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.assistantFootnote {
+  padding: 7px 12px 10px;
+  line-height: 1.3;
+}
+@media (max-width: 650px) {
+  .assistantWidget {
+    right: 12px;
+    bottom: calc(83px + env(safe-area-inset-bottom));
+    z-index: 950;
+  }
+  .assistantToggle {
+    width: 54px;
+    height: 54px;
+  }
+  .assistantPanel {
+    position: fixed;
+    right: 8px;
+    bottom: calc(82px + env(safe-area-inset-bottom));
+    width: calc(100vw - 16px);
+    height: min(68dvh, 620px);
+    min-height: min(360px, calc(100dvh - 150px));
+    max-height: calc(100dvh - 150px - env(safe-area-inset-top));
+  }
+}
 @media (min-width: 1051px) {
   .overviewKpis {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
