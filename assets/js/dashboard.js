@@ -350,6 +350,7 @@ const chartDayMarkers = {
       chart.canvas.id === "weather48Chart" ||
       chart.canvas.id === "homeWeatherChart"
     ) {
+      ctx.setLineDash([]);
       const labels = chart.data.labels || [];
       chart.data.datasets.forEach((dataset, datasetIndex) => {
         if (!/температура/i.test(dataset.label || "")) return;
@@ -384,40 +385,41 @@ const chartDayMarkers = {
             const day = String(entry.date.day).padStart(2, "0");
             const month = String(entry.date.month).padStart(2, "0");
             const value = fmt(entry.value, 1);
-            const text = `${label} ${day}.${month} · ${value}°C`;
-            ctx.font = "700 10px Inter,system-ui,sans-serif";
-            const width = ctx.measureText(text).width + 12;
-            const height = 19;
+            const shortLabel =
+              label === "Макс"
+                ? "↑ Макс"
+                : label === "Мін"
+                  ? "↓ Мін"
+                  : "• Мін/макс";
+            const text = `${shortLabel} ${day}.${month} ${value}°`;
+            ctx.font = "700 8px Inter,system-ui,sans-serif";
+            const width = ctx.measureText(text).width;
             const x = Math.max(
-              chartArea.left + 2,
-              Math.min(position.x - width / 2, chartArea.right - width - 2),
+              chartArea.left + width / 2 + 2,
+              Math.min(position.x, chartArea.right - width / 2 - 2),
             );
-            let y = label === "Макс" ? position.y - height - 9 : position.y + 9;
-            if (y < chartArea.top + 2) y = position.y + 9;
-            if (y + height > chartArea.bottom - 2) y = position.y - height - 9;
-            y = Math.max(
-              chartArea.top + 2,
-              Math.min(y, chartArea.bottom - height - 2),
-            );
+            const maxLabel = label === "Макс" || label === "Мін/макс";
+            let y = maxLabel ? position.y - 10 : position.y + 12;
+            if (y < chartArea.top + 7) y = position.y + 12;
+            if (y > chartArea.bottom - 7) y = position.y - 10;
+            y = Math.max(chartArea.top + 7, Math.min(y, chartArea.bottom - 7));
 
             ctx.beginPath();
-            ctx.arc(position.x, position.y, 4, 0, Math.PI * 2);
-            ctx.fillStyle = "#f5fbff";
+            ctx.arc(position.x, position.y, 3.2, 0, Math.PI * 2);
+            ctx.fillStyle = dataset.borderColor || "#58e1ff";
             ctx.fill();
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = dataset.borderColor || "#58e1ff";
+            ctx.lineWidth = 1.3;
+            ctx.strokeStyle = "#f5fbff";
             ctx.stroke();
 
-            ctx.fillStyle = "rgba(7, 17, 32, 0.94)";
-            ctx.strokeStyle = dataset.borderColor || "#58e1ff";
-            ctx.lineWidth = 1.2;
-            ctx.fillRect(x, y, width, height);
-            ctx.strokeRect(x, y, width, height);
+            ctx.lineJoin = "round";
+            ctx.lineWidth = 2.5;
+            ctx.strokeStyle = "rgba(7, 17, 32, 0.94)";
             ctx.fillStyle = "#f5fbff";
-            ctx.font = "700 10px Inter,system-ui,sans-serif";
-            ctx.textAlign = "left";
+            ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-            ctx.fillText(text, x + 6, y + height / 2);
+            ctx.strokeText(text, x, y);
+            ctx.fillText(text, x, y);
           });
         });
       });
