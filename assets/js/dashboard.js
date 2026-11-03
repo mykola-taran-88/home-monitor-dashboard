@@ -131,27 +131,16 @@ function chartLabelTimestamp(value, now = Date.now()) {
       minute: Number(relative[3]),
     });
   }
-  const fullDate = label.match(
-    /(?:^|\D)(\d{1,2})\.(\d{1,2})\.(\d{4})[, ]+(\d{1,2}):(\d{2})/,
+  const dateTime = label.match(
+    /(?:^|\D)(\d{1,2})\.(\d{1,2})(?:\.(\d{4}))?[, ]+(\d{1,2}):(\d{2})/,
   );
-  const shortDate = label.match(
-    /(?:^|\D)(\d{1,2})\.(\d{1,2})(?:\D|$)[, ]+(\d{1,2}):(\d{2})/,
-  );
-  if (fullDate)
+  if (dateTime)
     return kyivWallTime({
-      day: Number(fullDate[1]),
-      month: Number(fullDate[2]),
-      year: Number(fullDate[3]),
-      hour: Number(fullDate[4]),
-      minute: Number(fullDate[5]),
-    });
-  if (shortDate)
-    return kyivWallTime({
-      day: Number(shortDate[1]),
-      month: Number(shortDate[2]),
-      year: today.year,
-      hour: Number(shortDate[3]),
-      minute: Number(shortDate[4]),
+      day: Number(dateTime[1]),
+      month: Number(dateTime[2]),
+      year: Number(dateTime[3]) || today.year,
+      hour: Number(dateTime[4]),
+      minute: Number(dateTime[5]),
     });
   const normalized = label.includes("T") ? label : label.replace(" ", "T");
   const parsed = Date.parse(
@@ -357,6 +346,82 @@ const chartDayMarkers = {
       ctx.fillText(label, labelX, chartArea.top + 4);
       ctx.setLineDash([4, 4]);
     });
+    if (
+      chart.canvas.id === "weather48Chart" ||
+      chart.canvas.id === "homeWeatherChart"
+    ) {
+      const labels = chart.data.labels || [];
+      chart.data.datasets.forEach((dataset, datasetIndex) => {
+        if (!/температура/i.test(dataset.label || "")) return;
+        const dailyValues = new Map();
+        (dataset.data || []).forEach((raw, index) => {
+          if (raw == null || raw === "") return;
+          const value = Number(raw);
+          const timestamp = chartLabelTimestamp(labels[index]);
+          if (!Number.isFinite(value) || !Number.isFinite(timestamp)) return;
+          const date = kyivParts(timestamp);
+          const key = `${date.year}-${date.month}-${date.day}`;
+          const entry = { index, value, timestamp, date };
+          const group = dailyValues.get(key) || { min: entry, max: entry };
+          if (value < group.min.value) group.min = entry;
+          if (value > group.max.value) group.max = entry;
+          dailyValues.set(key, group);
+        });
+
+        const meta = chart.getDatasetMeta(datasetIndex);
+        dailyValues.forEach(({ min, max }) => {
+          const marks =
+            min.index === max.index
+              ? [{ entry: min, label: "Мін/макс" }]
+              : [
+                  { entry: max, label: "Макс" },
+                  { entry: min, label: "Мін" },
+                ];
+          marks.forEach(({ entry, label }) => {
+            const point = meta.data[entry.index];
+            if (!point || point.skip) return;
+            const position = point.getProps(["x", "y"], true);
+            const day = String(entry.date.day).padStart(2, "0");
+            const month = String(entry.date.month).padStart(2, "0");
+            const value = fmt(entry.value, 1);
+            const text = `${label} ${day}.${month} · ${value}°C`;
+            ctx.font = "700 10px Inter,system-ui,sans-serif";
+            const width = ctx.measureText(text).width + 12;
+            const height = 19;
+            const x = Math.max(
+              chartArea.left + 2,
+              Math.min(position.x - width / 2, chartArea.right - width - 2),
+            );
+            let y = label === "Макс" ? position.y - height - 9 : position.y + 9;
+            if (y < chartArea.top + 2) y = position.y + 9;
+            if (y + height > chartArea.bottom - 2) y = position.y - height - 9;
+            y = Math.max(
+              chartArea.top + 2,
+              Math.min(y, chartArea.bottom - height - 2),
+            );
+
+            ctx.beginPath();
+            ctx.arc(position.x, position.y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = "#f5fbff";
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = dataset.borderColor || "#58e1ff";
+            ctx.stroke();
+
+            ctx.fillStyle = "rgba(7, 17, 32, 0.94)";
+            ctx.strokeStyle = dataset.borderColor || "#58e1ff";
+            ctx.lineWidth = 1.2;
+            ctx.fillRect(x, y, width, height);
+            ctx.strokeRect(x, y, width, height);
+            ctx.fillStyle = "#f5fbff";
+            ctx.font = "700 10px Inter,system-ui,sans-serif";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, x + 6, y + height / 2);
+          });
+        });
+      });
+    }
     ctx.restore();
   },
 };
