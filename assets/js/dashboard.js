@@ -3173,8 +3173,57 @@ function initAssistantWidget() {
     form = $("assistantForm"),
     input = $("assistantInput"),
     send = $("assistantSend"),
+    templateList = $("assistantTemplateList"),
+    templateTitle = $("assistantTemplateTitle"),
+    templateBack = $("assistantTemplateBack"),
     storageKey = "hmAssistantConversation",
     messagesKey = "hmAssistantMessages";
+  const templateCategories = [
+    {
+      title: "🚨 Алерти й сигнали",
+      prompts: [
+        "Які активні події та сповіщення зараз потребують уваги?",
+        "Як працюють правила сповіщень, пороги та тихі години?",
+      ],
+    },
+    {
+      title: "🌡️ Температура й вологість",
+      prompts: [
+        "Які зараз температура та вологість у кімнатах?",
+        "Порівняй мінімальну, середню й максимальну температуру та вологість у кімнатах за останні 24 години.",
+        "У яких кімнатах зараз температура або вологість поза комфортними межами?",
+      ],
+    },
+    {
+      title: "⚡ Споживання й витрати",
+      prompts: [
+        "Скільки електроенергії спожито сьогодні та скільки це коштує?",
+        "Порівняй споживання електрики поточної ночі й минулої ночі у кВт·год і відсотках.",
+        "Який зараз діє тариф на електроенергію і коли він змінюється?",
+      ],
+    },
+    {
+      title: "🔌 Напруга й мережа",
+      prompts: [
+        "Яка зараз напруга в мережі та чи вона в межах норми?",
+        "Покажи мінімальну, середню й максимальну напругу за останні 24 години.",
+      ],
+    },
+    {
+      title: "⚙️ Система й розрахунки",
+      prompts: [
+        "Чи всі активні пристрої передають актуальні дані? Покажи час останнього зв’язку.",
+        "Що формує Home Score і які чинники зараз знижують оцінку?",
+      ],
+    },
+    {
+      title: "🌦️ Погода й прогноз",
+      prompts: [
+        "Який прогноз температури та ймовірності опадів на найближчі 24 години?",
+        "Які погодні ризики очікуються найближчим часом і коли саме?",
+      ],
+    },
+  ];
   let conversationId = localStorage.getItem(storageKey);
   if (!conversationId || !/^[a-f0-9-]{36}$/i.test(conversationId)) {
     conversationId = crypto.randomUUID
@@ -3227,6 +3276,40 @@ function initAssistantWidget() {
       if (open) setTimeout(() => input.focus(), 80);
     };
 
+  const showTemplateCategories = () => {
+      templateTitle.textContent = "Корисні запитання";
+      templateBack.hidden = true;
+      templateList.replaceChildren();
+      templateCategories.forEach((category, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "assistantTemplateCategory";
+        button.textContent = `${category.title} · ${category.prompts.length}`;
+        button.setAttribute("aria-expanded", "false");
+        button.addEventListener("click", () => showTemplatePrompts(index));
+        templateList.append(button);
+      });
+    },
+    showTemplatePrompts = (index) => {
+      const category = templateCategories[index];
+      if (!category) return showTemplateCategories();
+      templateTitle.textContent = category.title;
+      templateBack.hidden = false;
+      templateList.replaceChildren();
+      category.prompts.forEach((prompt) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "assistantTemplatePrompt";
+        button.textContent = prompt;
+        button.addEventListener("click", () => {
+          input.value = prompt;
+          form.requestSubmit();
+        });
+        templateList.append(button);
+      });
+    };
+
+  showTemplateCategories();
   render();
   toggle.addEventListener("click", () =>
     setOpen(!widget.classList.contains("is-open")),
@@ -3252,12 +3335,7 @@ function initAssistantWidget() {
       render();
     }
   });
-  document.querySelectorAll("[data-assistant-prompt]").forEach((button) =>
-    button.addEventListener("click", () => {
-      input.value = button.dataset.assistantPrompt;
-      form.requestSubmit();
-    }),
-  );
+  templateBack.addEventListener("click", showTemplateCategories);
   input.addEventListener("keydown", (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();

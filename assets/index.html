@@ -711,25 +711,18 @@
           class="assistantMessages"
           aria-live="polite"
         ></div>
-        <div class="assistantSuggestions" aria-label="Приклади запитань">
-          <button
-            type="button"
-            data-assistant-prompt="Які зараз показники температури та вологості в кімнатах?"
-          >
-            Клімат
-          </button>
-          <button
-            type="button"
-            data-assistant-prompt="Поясни споживання електроенергії за сьогодні"
-          >
-            Енергія
-          </button>
-          <button
-            type="button"
-            data-assistant-prompt="Що означають показники на головному екрані?"
-          >
-            Довідка
-          </button>
+        <div class="assistantSuggestions" aria-label="Шаблони запитань">
+          <div class="assistantTemplateHeading">
+            <b id="assistantTemplateTitle">Корисні запитання</b>
+            <button id="assistantTemplateBack" type="button" hidden>
+              ← Категорії
+            </button>
+          </div>
+          <div
+            id="assistantTemplateList"
+            class="assistantTemplateList"
+            aria-live="polite"
+          ></div>
         </div>
         <form id="assistantForm" class="assistantForm">
           <textarea
