@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="uk" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>TarON Home · Огляд дому</title>
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="/css/dashboard.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="glass">
+        <div class="brand">
+          <img
+            class="brandLogoFull"
+            src="/TarON_logo_accent-dark.svg"
+            alt="TarON"
+          /><img class="brandAvatar" src="/TarON_avatar_graphite.svg" alt="" />
+          <div class="brandCaption">
+            <b>Home</b><small>Твій дім. У полі зору. · 3.6.2</small>
+          </div>
+        </div>
+        <div class="headerActions">
+          <span id="updated" class="muted">Завантаження…</span
+          ><select id="mode" class="input">
+            <option value="eco">🌿 Eco 5 хв</option>
+            <option value="live">🟢 Live 1 хв</option>
+            <option value="manual">✋ Manual</option></select
+          ><button class="btn" id="refresh">↻</button
+          ><button class="btn" id="theme">☾</button>
+        </div>
+      </header>
+      <nav class="tabs glass">
+        <button class="tab active" data-view="home" data-label="Огляд">
+          🏠 Огляд</button
+        ><button class="tab" data-view="climate" data-label="Клімат">
+          🌡 Клімат</button
+        ><button class="tab" data-view="energy" data-label="Енергія">
+          ⚡ Енергія</button
+        ><button class="tab" data-view="weather" data-label="Погода">
+          🌦 Погода</button
+        ><button class="tab" data-view="timeline" data-label="Події">
+          🕒 Події</button
+        ><button class="tab" data-view="admin" data-label="Налашт.">
+          ⚙ Налашт.
+        </button>
+      </nav>
+      <section id="home" class="view active">
+        <div class="overview33">
+          <div class="statusCompact glass">
+            <span id="statusPill" class="statusPill good"
+              >● Система працює</span
+            >
+            <h2 id="heroTitle">Ваш дім під контролем</h2>
+            <p class="muted" id="heroText">Збираємо актуальні показники.</p>
+            <div class="heroQuick">
+              <button class="btn" id="heroRefresh">↻ Оновити</button
+              ><button class="btn" data-go="timeline">◷ Події</button
+              ><button class="btn" data-go="admin">⚙ Керування</button>
+            </div>
+          </div>
+          <div class="scoreCompact glass">
+            <div class="row">
+              <b>Оцінка дому</b><small>Здоров’я дому</small>
+            </div>
+            <div class="score" id="scoreRing" style="--s: 0">
+              <strong id="score">—</strong>
+            </div>
+            <div class="insightGrid" id="scoreParts"></div>
+            <div class="scoreExplain" id="scoreExplain">Розраховуємо…</div>
+          </div>
+          <div class="overviewKpis" id="commandStrip"></div>
+          <div id="kpis" hidden></div>
+          <div id="quickFacts" hidden></div>
+          <div class="overviewBottom">
+            <div class="compactPanel glass">
+              <h3>🏠 Кімнати й вулиця</h3>
+              <div class="compactRooms" id="overviewRoomCards"></div>
+              <section
+                class="homeDailyChanges"
+                id="homeDailyChanges"
+                aria-live="polite"
+              ></section>
+              <div id="overviewRooms" hidden></div>
+            </div>
+            <div class="compactPanel glass">
+              <div class="row">
+                <h3>⚡ Електрика · останні 24 години</h3>
+                <button class="btn" data-go="energy">Детальніше</button>
+              </div>
+              <div class="miniElectricChart">
+                <canvas id="homeEnergyChart"></canvas>
+                <div class="empty" id="homeEnergyEmpty" hidden>
+                  Немає даних про споживання за останні 24 години.
+                </div>
+              </div>
+            </div>
+            <div class="compactPanel glass">
+              <div class="row">
+                <h3>🌦 Наступні 48 годин</h3>
+                <button class="btn" data-go="weather">Детальніше</button>
+              </div>
+              <div class="miniWeatherChart">
+                <canvas id="homeWeatherChart"></canvas>
+              </div>
+            </div>
+            <div class="compactPanel glass">
+              <h3>💡 Увага</h3>
+              <div class="attentionList" id="homeAttention"></div>
+              <div id="recs" hidden></div>
+              <div id="alertsPreview" hidden></div>
+              <span id="recCount" hidden></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="climate" class="view">
+        <div class="grid">
+          <div class="panel full glass">
+            <div class="sectionTitle">
+              <div>
+                <h2>🏠 Room Intelligence</h2>
+                <small>Реальний зв'язок, комфорт і останні дані</small>
+              </div>
+            </div>
+            <div class="roomSummary" id="roomSummary"></div>
+            <div class="deviceGrid" id="devicesGrid"></div>
+            <div class="rooms" id="rooms"></div>
+          </div>
+          <div class="climateWorkspace">
+            <div class="panel glass floorPlanPanel">
+              <div class="row">
+                <h2>План квартири</h2>
+                <div class="metricSwitch floorPlanMetric">
+                  <button
+                    type="button"
+                    class="active"
+                    data-floor-metric="temperature"
+                  >
+                    °C</button
+                  ><button type="button" data-floor-metric="humidity">
+                    Вологість
+                  </button>
+                </div>
+              </div>
+              <div class="floorPlanCanvas" id="floorPlanContainer">
+                <svg
+                  id="floorPlanSvg"
+                  viewBox="0 0 1200 600"
+                  preserveAspectRatio="xMidYMid meet"
+                  role="group"
+                  aria-label="Схематичний план квартири з показниками датчиків"
+                >
+                  <defs>
+                    <linearGradient id="plan-wall" x2="0" y2="1">
+                      <stop stop-color="#edf1f5" />
+                      <stop offset=".5" stop-color="#9ba6b2" />
+                      <stop offset="1" stop-color="#d7dde4" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    class="planStaticRoom"
+                    d="M45 43H158V32H418V231H73V181H45Z"
+                  />
+                  <path class="planStaticRoom" d="M438 42H749V231H438Z" />
+                  <path class="planStaticRoom" d="M72 242H480V530H72Z" />
+                  <path
+                    class="planStaticRoom"
+                    d="M496 240H798V490H679V509H650V492H510V470H496Z"
+                  />
+                  <path class="planStaticRoom" d="M805 248H1090V522H805Z" />
+                  <polygon
+                    class="planRoom unmapped"
+                    points="47,44 159,44 159,34 416,34 416,229 74,229 74,180 47,180"
+                    data-plan-room="4"
+                  />
+                  <polygon
+                    class="planRoom unmapped"
+                    points="440,43 747,43 747,229 440,229"
+                    data-plan-room="3"
+                  />
+                  <polygon
+                    class="planRoom mapped"
+                    points="498,242 796,242 796,488 678,488 678,507 652,507 652,490 512,490 512,468 498,468"
+                    data-plan-room="1"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Коридор, вибрати"
+                  />
+                  <polygon
+                    class="planRoom mapped"
+                    points="807,250 1088,250 1088,520 807,520"
+                    data-plan-room="2"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Спальня, вибрати"
+                  />
+                  <polygon
+                    class="planRoom mapped"
+                    points="74,244 478,244 478,528 74,528"
+                    data-plan-room="5"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Дитяча кімната, вибрати"
+                  />
+                  <g class="planWalls" aria-hidden="true">
+                    <path
+                      d="M34 26H423V232H74V184H34Z M430 26H766V241H430Z M65 232H487V548H64Z M487 232H804V494L686 494V520H641V501H500V477H487Z M796 238H1127V537H796Z"
+                    />
+                    <path
+                      d="M424 29V229M432 42V229M74 232H428M490 241V465M800 241V520M493 230H640M680 493H795"
+                    />
+                  </g>
+                  <g class="planWindows" aria-hidden="true">
+                    <path
+                      d="M37 62V179M48 62V179M1100 286V414M1112 286V414M77 540H485M834 532H1088"
+                    />
+                  </g>
+                  <g class="doorMarks" aria-hidden="true">
+                    <path
+                      d="M432 177V231M432 177A54 54 0 0 1 486 231M642 232V294M642 294A62 62 0 0 0 704 232M487 332H435M435 332A52 52 0 0 1 487 384M800 432H854M854 432A54 54 0 0 0 800 486M653 495V552M653 552A57 57 0 0 1 710 495"
+                    />
+                  </g>
+                  <text class="planNumber" x="640" y="280">1</text>
+                  <text class="planNumber" x="945" y="282">2</text>
+                  <text class="planNumber" x="492" y="156">3</text>
+                  <text class="planNumber" x="260" y="155">4</text>
+                  <text class="planNumber" x="280" y="282">5</text>
+                  <g
+                    class="planReadout"
+                    data-plan-readout="1"
+                    transform="translate(516 337)"
+                  >
+                    <title></title>
+                    <rect width="265" height="94" rx="12" />
+                    <text
+                      class="planName"
+                      data-plan-name="1"
+                      x="132"
+                      y="37"
+                      text-anchor="middle"
+                    >
+                      🚪 Коридор
+                    </text>
+                    <text
+                      class="planValue"
+                      data-plan-value="1"
+                      x="132"
+                      y="70"
+                      text-anchor="middle"
+                    >
+                      —
+                    </text>
+                  </g>
+                  <g
+                    class="planReadout"
+                    data-plan-readout="2"
+                    transform="translate(817 340)"
+                  >
+                    <title></title>
+                    <rect width="260" height="94" rx="12" />
+                    <text
+                      class="planName"
+                      data-plan-name="2"
+                      x="130"
+                      y="37"
+                      text-anchor="middle"
+                    >
+                      🛏️ Спальня
+                    </text>
+                    <text
+                      class="planValue"
+                      data-plan-value="2"
+                      x="130"
+                      y="70"
+                      text-anchor="middle"
+                    >
+                      —
+                    </text>
+                  </g>
+                  <g
+                    class="planReadout"
+                    data-plan-readout="5"
+                    transform="translate(108 367)"
+                  >
+                    <title></title>
+                    <rect width="340" height="94" rx="12" />
+                    <text
+                      class="planName"
+                      data-plan-name="5"
+                      x="170"
+                      y="37"
+                      text-anchor="middle"
+                    >
+                      👶 Дитяча
+                    </text>
+                    <text
+                      class="planValue"
+                      data-plan-value="5"
+                      x="170"
+                      y="70"
+                      text-anchor="middle"
+                    >
+                      —
+                    </text>
+                  </g>
+                  <path class="entryMark" d="M689 550h40" />
+                  <text class="entryLabel" x="709" y="581" text-anchor="middle">
+                    ▲ Вхід
+                  </text>
+                </svg>
+              </div>
+              <div class="planLegend">
+                <span>Холодніше / сухіше</span><i></i
+                ><span>Тепліше / вологіше</span>
+              </div>
+              <p class="chartMeta" id="floorPlanNote">
+                Натисніть на кімнату, щоб показати її історію. Накладання вмикає
+                порівняння кімнат.
+              </p>
+              <div class="planActions">
+                <button class="btn" type="button" id="climateOverlayToggle">
+                  Накладання: вимкнено</button
+                ><button class="btn" type="button" id="clearClimateSelection">
+                  Скинути вибір
+                </button>
+              </div>
+            </div>
+            <div class="panel glass climateChartPanel">
+              <div class="row">
+                <div><h2>🌡 Climate Intelligence</h2></div>
+                <div class="smartPeriod" data-smart-scope="climate">
+                  <button data-p="day">День</button
+                  ><button data-p="week" class="active">Тиждень</button
+                  ><button data-p="month">Місяць</button
+                  ><button data-p="custom">Власний</button>
+                </div>
+                <div class="customRange" data-custom="climate">
+                  <input class="input from" type="date" /><input
+                    class="input to"
+                    type="date"
+                  /><button class="btn apply">OK</button>
+                </div>
+                <div
+                  class="metricSwitch climateViewSwitch"
+                  data-mscope="climate"
+                >
+                  <button
+                    type="button"
+                    data-metric="tempHumidity"
+                    class="active"
+                  >
+                    Температура + вологість</button
+                  ><button type="button" data-metric="temperature">
+                    Температура</button
+                  ><button type="button" data-metric="humidity">
+                    Вологість
+                  </button>
+                </div>
+              </div>
+              <div id="climateRoomFilters" class="seriesFilters"></div>
+              <div class="chartMeta" id="climateChartMeta">
+                Порівняйте температуру та вологість за вибраними кімнатами.
+              </div>
+              <div class="climateChartSplit">
+                <div class="climateMetricStack">
+                  <section
+                    class="climateMetricPanel"
+                    id="climateTemperaturePanel"
+                  >
+                    <h3>🌡 Температура, °C</h3>
+                    <div class="chart">
+                      <canvas
+                        id="climateTempChart"
+                        aria-label="Температура у вибраних кімнатах"
+                        role="img"
+                      ></canvas>
+                    </div>
+                  </section>
+                  <section class="climateMetricPanel" id="climateHumidityPanel">
+                    <h3>💧 Вологість, %</h3>
+                    <div class="chart">
+                      <canvas
+                        id="climateHumidityChart"
+                        aria-label="Вологість у вибраних кімнатах"
+                        role="img"
+                      ></canvas>
+                    </div>
+                  </section>
+                </div>
+                <aside id="climatePeriodStats" class="climatePeriodStats">
+                  <h3>Значення за період</h3>
+                  <p>Оберіть кімнату на плані або у списку.</p>
+                </aside>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="energy" class="view">
+        <div class="grid">
+          <div class="panel full glass">
+            <div class="row">
+              <div>
+                <h2>⚡ Енергія дому</h2>
+                <div class="chartMeta">
+                  День: 15-хв інтервали · Тиждень: 2-год інтервали · Місяць: по
+                  днях
+                </div>
+              </div>
+              <div class="smartPeriod" data-smart-scope="energy2">
+                <button data-p="day">День</button
+                ><button data-p="week" class="active">Тиждень</button
+                ><button data-p="month">Місяць</button
+                ><button data-p="custom">Власний</button>
+              </div>
+              <div class="customRange" data-custom="energy2">
+                <input class="input from" type="date" /><input
+                  class="input to"
+                  type="date"
+                /><button class="btn apply">OK</button>
+              </div>
+              <div class="metricSwitch" data-mscope="voltage">
+                <button type="button" data-metric="energyCost" class="active">
+                  Енергія + витрати</button
+                ><button type="button" data-metric="power" class="">
+                  Потужність</button
+                ><button type="button" data-metric="voltage" class="">
+                  Напруга
+                </button>
+              </div>
+              <select class="input chartType" data-chart="voltage">
+                <option value="line">Лінія</option>
+                <option value="bar">Стовпчики</option>
+                <option value="area">Область</option>
+                <option value="table">Таблиця</option>
+              </select>
+            </div>
+            <div class="chart"><canvas id="voltageChart"></canvas></div>
+          </div>
+          <div class="panel glass">
+            <h3>День</h3>
+            <b id="dayEnergy">—</b>
+          </div>
+          <div class="panel glass">
+            <h3>Ніч</h3>
+            <b id="nightEnergy">—</b>
+          </div>
+          <div class="panel glass">
+            <h3>Вартість місяця</h3>
+            <b id="monthCost">—</b>
+          </div>
+          <div class="panel wide glass">
+            <div class="sectionTitle">
+              <div>
+                <h3>Денний / нічний тариф</h3>
+                <small>Споживання і вартість за вибраний період</small>
+              </div>
+              <div class="tariffControls">
+                <div
+                  class="tariffRangeMode"
+                  role="group"
+                  aria-label="Період тарифної статистики"
+                >
+                  <button
+                    type="button"
+                    class="btn active"
+                    data-tariff-mode="month"
+                    aria-pressed="true"
+                  >
+                    Місяць</button
+                  ><button
+                    type="button"
+                    class="btn"
+                    data-tariff-mode="custom"
+                    aria-pressed="false"
+                  >
+                    Діапазон дат
+                  </button>
+                </div>
+                <label
+                  class="tariffField tariffMonthField"
+                  id="tariffMonthField"
+                  ><span>Місяць</span
+                  ><input
+                    id="tariffMonth"
+                    class="input"
+                    type="month"
+                    aria-label="Місяць" /></label
+                ><label
+                  class="tariffField tariffCustomField"
+                  id="tariffFromField"
+                  hidden
+                  ><span>Від</span
+                  ><input
+                    id="tariffFrom"
+                    class="input wideControl"
+                    type="date"
+                    aria-label="Початкова дата" /></label
+                ><label
+                  class="tariffField tariffCustomField"
+                  id="tariffToField"
+                  hidden
+                  ><span>До</span
+                  ><input
+                    id="tariffTo"
+                    class="input wideControl"
+                    type="date"
+                    aria-label="Кінцева дата" /></label
+                ><button id="tariffApply" class="btn" hidden>
+                  Застосувати
+                </button>
+              </div>
+            </div>
+            <div class="tariffChartWrap">
+              <canvas id="tariffChart"></canvas>
+            </div>
+            <div id="tariffTotals" class="tariffTotals"></div>
+          </div>
+          <div class="panel glass">
+            <h3>Енергетичні висновки</h3>
+            <div id="energyInsights" class="list"></div>
+          </div>
+        </div>
+      </section>
+      <section id="weather" class="view">
+        <div class="weatherPrimary">
+          <div class="panel full glass premiumPanel">
+            <div class="sectionTitle">
+              <div>
+                <h2>Погода на 48 годин</h2>
+                <small>Прогноз кожні 3 години · виберіть показники нижче</small>
+              </div>
+              <div class="seg" id="weatherMetric">
+                <button data-wmetric="temperature" class="active">
+                  Температура + дощ</button
+                ><button data-wmetric="humidity">Вологість + температура</button
+                ><button data-wmetric="wind">Вітер + температура</button>
+              </div>
+            </div>
+            <div class="weatherChart">
+              <canvas id="weather48Chart"></canvas>
+            </div>
+          </div>
+          <div class="weatherHero">
+            <div class="weatherNow glass">
+              <div class="muted">Зараз</div>
+              <div class="big" id="weatherNow">🌦 —</div>
+              <p id="weatherInfo" class="muted"></p>
+              <div id="ventilationWindow" class="insight"></div>
+            </div>
+            <div class="forecastBlock">
+              <h3>Прогноз на 7 днів</h3>
+              <div class="forecastSummary" id="forecast"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="timeline" class="view">
+        <div class="panel glass">
+          <div class="row">
+            <h2>🕒 Home Timeline</h2>
+            <button class="btn" onclick="loadTimeline()">Оновити</button>
+          </div>
+          <div class="timelineFilters" id="timelineFilters"></div>
+          <div class="list timeline" id="timelineList"></div>
+        </div>
+      </section>
+      <section id="admin" class="view">
+        <div id="locked" class="banner glass">
+          <div>
+            <span class="statusPill attention">🔐 Захищена зона</span>
+            <h2>Керування Home Monitor</h2>
+            <p class="muted">
+              Канали, категорії, розклади, тихі години та системні пороги.
+            </p>
+          </div>
+          <button class="btn primary" onclick="openLogin()">Увійти</button>
+        </div>
+        <div id="adminApp" hidden class="adminGrid">
+          <aside class="adminNav glass">
+            <button class="btn" onclick="adminPage('channels')">
+              📣 Канали</button
+            ><button class="btn" onclick="adminPage('categories')">
+              🔔 Категорії</button
+            ><button class="btn" onclick="adminPage('schedules')">
+              🕒 Розклади</button
+            ><button class="btn" onclick="adminPage('modes')">
+              🏠 Режими дому</button
+            ><button class="btn" onclick="adminPage('settings')">
+              ⚙ Пороги</button
+            ><button class="btn" onclick="adminPage('audit')">📜 Audit</button
+            ><button class="btn danger" onclick="logout()">Вийти</button>
+          </aside>
+          <main>
+            <div id="ap-channels" class="adminPage active panel glass">
+              <div class="row">
+                <h2>📣 Telegram канали</h2>
+                <button class="btn primary" onclick="addChannel()">
+                  + Додати
+                </button>
+              </div>
+              <div id="channelsList" class="list"></div>
+            </div>
+            <div id="ap-categories" class="adminPage panel glass">
+              <h2>🔔 Категорії</h2>
+              <div id="categoriesList" class="list"></div>
+            </div>
+            <div id="ap-schedules" class="adminPage panel glass">
+              <h2>🕒 Розклади і cooldown</h2>
+              <div id="schedulesList" class="list"></div>
+            </div>
+            <div id="ap-modes" class="adminPage panel glass">
+              <h2>🏠 Режими дому</h2>
+              <div id="modesList" class="list"></div>
+            </div>
+            <div id="ap-settings" class="adminPage panel glass">
+              <div class="row">
+                <h2>⚙ Системні пороги</h2>
+                <button class="btn primary" onclick="saveSettings()">
+                  Зберегти
+                </button>
+              </div>
+              <div class="formGrid" id="settingsForm"></div>
+            </div>
+            <div id="ap-audit" class="adminPage panel glass">
+              <h2>📜 Журнал змін</h2>
+              <div id="auditList" class="list"></div>
+            </div>
+          </main>
+        </div>
+      </section>
+    </div>
+    <div id="detailModal" class="modal">
+      <div class="modalBox modalWide glass">
+        <div class="row">
+          <h2 id="detailTitle">Деталі</h2>
+          <button type="button" class="btn" id="detailClose">✕</button>
+        </div>
+        <div id="detailBody"></div>
+      </div>
+    </div>
+    <div id="loginModal" class="modal">
+      <div class="modalBox glass">
+        <h2>🔐 Admin Login</h2>
+        <div class="field">
+          <label>Пароль</label
+          ><input
+            id="password"
+            type="password"
+            class="input"
+            autocomplete="current-password"
+          />
+        </div>
+        <p id="loginError" class="critical"></p>
+        <div class="row">
+          <button class="btn" onclick="closeLogin()">Скасувати</button
+          ><button class="btn primary" onclick="login()">Увійти</button>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script src="/js/dashboard.js" defer></script>
+  </body>
+</html>

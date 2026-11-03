@@ -3,6 +3,13 @@
   "private": true,
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "format": "prettier --write \"src/**/*.js\" \"assets/**/*.css\" \"assets/**/*.js\" assets/index.html package.json",
+    "format:check": "prettier --check \"src/**/*.js\" \"assets/**/*.css\" \"assets/**/*.js\" assets/index.html package.json",
+    "check:syntax": "node --check src/index.js && node --check assets/js/dashboard.js"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "wrangler": "^4.156.0"
   }
 }

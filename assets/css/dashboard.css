@@ -1,0 +1,3944 @@
+:root {
+  --bg: #050914;
+  --panel: #0d1628dd;
+  --panel2: #111f38;
+  --text: #f5f8ff;
+  --muted: #91a4c4;
+  --line: #243551;
+  --a: #58e1ff;
+  --b: #8c6cff;
+  --ok: #39dc98;
+  --warn: #ffc857;
+  --bad: #ff647c;
+  --shadow: 0 24px 70px #0008;
+}
+html[data-theme="light"] {
+  --bg: #eef5ff;
+  --panel: #ffffffee;
+  --panel2: #f7faff;
+  --text: #102033;
+  --muted: #60738f;
+  --line: #dbe7f6;
+  --shadow: 0 20px 60px #3355aa20;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Inter, system-ui, "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 8% 0, #58e1ff22, transparent 28%),
+    radial-gradient(circle at 95% 5%, #8c6cff25, transparent 32%), var(--bg);
+  min-height: 100vh;
+}
+.shell {
+  max-width: 1560px;
+  margin: auto;
+  padding: 14px;
+}
+.glass {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  backdrop-filter: blur(22px);
+  box-shadow: var(--shadow);
+}
+header {
+  position: sticky;
+  top: 8px;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+}
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.logo {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: linear-gradient(135deg, var(--a), var(--b));
+  font-size: 25px;
+  box-shadow: 0 0 30px #58e1ff44;
+}
+.muted,
+small {
+  color: var(--muted);
+}
+button,
+input,
+select {
+  font: inherit;
+}
+.btn,
+.input,
+.tab {
+  border: 1px solid var(--line);
+  color: var(--text);
+  background: #ffffff08;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.btn,
+.tab {
+  cursor: pointer;
+}
+.btn:hover,
+.tab:hover {
+  border-color: var(--a);
+}
+.primary {
+  background: linear-gradient(135deg, #58e1ff33, #8c6cff44);
+  border-color: #58e1ff88;
+}
+.danger {
+  border-color: #ff647c99;
+  color: #ff91a3;
+}
+.tabs {
+  display: flex;
+  gap: 7px;
+  overflow: auto;
+  padding: 8px;
+  margin: 14px 0;
+}
+.tab {
+  white-space: nowrap;
+}
+.tab.active {
+  background: linear-gradient(135deg, #58e1ff33, #8c6cff44);
+  border-color: #58e1ff88;
+}
+.view {
+  display: none;
+}
+.view.active {
+  display: block;
+}
+.banner {
+  padding: 22px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  background: linear-gradient(135deg, #58e1ff18, #8c6cff22);
+}
+.banner h2 {
+  font-size: clamp(26px, 4vw, 48px);
+  margin: 6px 0;
+}
+.statusPill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+}
+.good {
+  background: #39dc9822;
+  color: #72f0ba;
+}
+.attention {
+  background: #ffc85722;
+  color: #ffd87d;
+}
+.critical {
+  background: #ff647c22;
+  color: #ff9cad;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+  margin: 14px 0;
+}
+.panel {
+  padding: 18px;
+  grid-column: span 4;
+}
+.wide {
+  grid-column: span 8;
+}
+.full {
+  grid-column: 1/-1;
+}
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+.kpi {
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #ffffff0c, #ffffff04);
+  border: 1px solid var(--line);
+}
+.kpi b {
+  display: block;
+  font-size: clamp(22px, 3vw, 36px);
+  margin: 7px 0;
+}
+.score {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(var(--ok) calc(var(--s) * 1%), #ffffff10 0);
+  position: relative;
+}
+.score:after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  background: var(--panel2);
+}
+.score strong {
+  z-index: 1;
+  font-size: 45px;
+}
+.list {
+  display: grid;
+  gap: 10px;
+}
+.item {
+  padding: 13px;
+  border-radius: 15px;
+  border: 1px solid var(--line);
+  background: #ffffff06;
+}
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.chart {
+  height: 310px;
+}
+.chartTools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+.rooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.room {
+  padding: 15px;
+  border-radius: 18px;
+  background: #ffffff07;
+  border: 1px solid var(--line);
+}
+.adminGrid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 14px;
+}
+.adminNav {
+  padding: 12px;
+  height: max-content;
+}
+.adminNav button {
+  width: 100%;
+  margin: 5px 0;
+  text-align: left;
+}
+.adminPage {
+  display: none;
+}
+.adminPage.active {
+  display: block;
+}
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.field {
+  display: grid;
+  gap: 6px;
+}
+.toggle {
+  accent-color: #58e1ff;
+  width: 20px;
+  height: 20px;
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  background: #000b;
+  display: none;
+  place-items: center;
+  z-index: 50;
+}
+.modal.show {
+  display: grid;
+}
+.modalBox {
+  width: min(440px, 92vw);
+  padding: 25px;
+}
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: #10253a;
+  border: 1px solid var(--a);
+  display: none;
+  z-index: 60;
+}
+.timeline .item {
+  border-left: 4px solid var(--a);
+}
+@media (max-width: 1000px) {
+  .panel,
+  .wide {
+    grid-column: 1/-1;
+  }
+  .kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .adminGrid {
+    grid-template-columns: 1fr;
+  }
+  .adminNav {
+    display: flex;
+    overflow: auto;
+  }
+  .adminNav button {
+    width: auto;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 650px) {
+  .shell {
+    padding: 8px;
+  }
+  header {
+    align-items: flex-start;
+  }
+  .headerActions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .kpis {
+    grid-template-columns: 1fr 1fr;
+  }
+  .banner {
+    display: block;
+  }
+  .score {
+    width: 150px;
+    height: 150px;
+    margin: auto;
+  }
+}
+
+/* Overview 24h 3.6.2 */
+:root {
+  --c1: #69e6ff;
+  --c2: #715cff;
+  --c3: #31d7a3;
+  --surface: rgba(12, 22, 41, 0.82);
+  --radius: 22px;
+}
+body:before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 500px at 16% -10%, #2ad8ff18, transparent 65%),
+    radial-gradient(800px 600px at 90% 10%, #795cff18, transparent 60%);
+  z-index: -1;
+}
+.shell {
+  max-width: 1680px;
+  padding-left: 112px;
+}
+.glass {
+  background: linear-gradient(
+    145deg,
+    rgba(18, 30, 53, 0.9),
+    rgba(8, 15, 29, 0.82)
+  );
+  border-color: #6ee7ff22;
+  box-shadow:
+    0 18px 55px #0007,
+    inset 0 1px 0 #fff08;
+}
+header {
+  z-index: 100;
+}
+.tabs {
+  position: fixed;
+  left: 14px;
+  top: 92px;
+  width: 84px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  z-index: 90;
+  margin: 0;
+  overflow: visible;
+}
+.tab {
+  min-height: 54px;
+  padding: 8px 5px;
+  font-size: 0;
+  display: grid;
+  place-items: center;
+  position: relative;
+  pointer-events: auto !important;
+}
+.tab:before {
+  font-size: 23px;
+}
+.tab[data-view="home"]:before {
+  content: "⌂";
+}
+.tab[data-view="climate"]:before {
+  content: "🌡";
+}
+.tab[data-view="energy"]:before {
+  content: "⚡";
+}
+.tab[data-view="weather"]:before {
+  content: "☁";
+}
+.tab[data-view="timeline"]:before {
+  content: "◷";
+}
+.tab[data-view="admin"]:before {
+  content: "⚙";
+}
+.tab:hover:after {
+  content: attr(data-label);
+  position: absolute;
+  left: 70px;
+  background: #101b30;
+  padding: 8px 11px;
+  border-radius: 10px;
+  font-size: 13px;
+  white-space: nowrap;
+  color: #fff;
+  border: 1px solid #ffffff18;
+}
+.tab.active {
+  box-shadow: 0 0 22px #58e1ff35;
+}
+.btn,
+.input,
+.tab,
+button,
+select,
+input,
+summary {
+  position: relative;
+  z-index: 5;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+.btn {
+  transition:
+    0.2s transform,
+    0.2s border-color,
+    0.2s background;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  background: #ffffff12;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+canvas {
+  position: relative !important;
+  z-index: 1 !important;
+  max-width: 100%;
+  pointer-events: auto;
+}
+.chartTools,
+.row,
+header,
+.periodBar {
+  position: relative;
+  z-index: 6;
+}
+.hero31 {
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr;
+  gap: 16px;
+}
+.heroMain {
+  padding: 28px;
+  min-height: 250px;
+  background: linear-gradient(135deg, #58e1ff14, #745cff20);
+}
+.heroAside {
+  padding: 20px;
+}
+.heroMain h2 {
+  font-size: clamp(30px, 4vw, 56px);
+  margin: 12px 0;
+  letter-spacing: -1.8px;
+}
+.quickFacts {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.fact {
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: #ffffff09;
+  border: 1px solid #ffffff13;
+}
+.commandStrip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(130px, 1fr));
+  gap: 10px;
+  overflow: auto;
+  padding-bottom: 4px;
+  margin: 14px 0;
+}
+.metric {
+  min-width: 130px;
+  padding: 15px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #ffffff0c, #ffffff04);
+  border: 1px solid var(--line);
+}
+.metric strong {
+  font-size: 22px;
+  display: block;
+  margin-top: 7px;
+}
+.periodBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.seg {
+  display: flex;
+  padding: 4px;
+  border: 1px solid var(--line);
+  background: #0002;
+  border-radius: 13px;
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 11px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+.seg button.active {
+  color: #06121d;
+  background: linear-gradient(135deg, var(--c1), #a6f4ff);
+  font-weight: 800;
+}
+.sectionTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.insightGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.insight {
+  padding: 15px;
+  border-radius: 17px;
+  background: #ffffff07;
+  border: 1px solid var(--line);
+}
+.premiumPanel {
+  padding: 20px;
+  border-radius: var(--radius);
+}
+.weatherHero {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 14px;
+}
+.weatherNow {
+  padding: 26px;
+  background: linear-gradient(145deg, #4bc7ff20, #715cff20);
+}
+.weatherNow .big {
+  font-size: 50px;
+  font-weight: 800;
+}
+.forecastSummary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.forecastDay {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #ffffff06;
+}
+.weatherChart {
+  height: 360px;
+}
+.miniTrend {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #58e1ff, var(--c3), #ffc857);
+  margin-top: 12px;
+}
+.room {
+  transition:
+    0.2s transform,
+    0.2s border-color;
+  cursor: pointer;
+}
+.room:hover {
+  transform: translateY(-3px);
+  border-color: #58e1ff66;
+}
+.roomTag {
+  font-size: 11px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #ffffff0b;
+}
+.comfortMatrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+.comfortCell {
+  padding: 14px;
+  border-radius: 15px;
+  border: 1px solid var(--line);
+}
+.timelineFilters {
+  display: flex;
+  gap: 6px;
+  overflow: auto;
+  padding: 6px 0;
+}
+.timelineFilters button {
+  white-space: nowrap;
+}
+.skeleton {
+  background: linear-gradient(90deg, #ffffff06, #ffffff12, #ffffff06);
+  background-size: 220% 100%;
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer {
+  to {
+    background-position: -220% 0;
+  }
+}
+.errorBox {
+  padding: 15px;
+  border: 1px solid #ff647c77;
+  background: #ff647c10;
+  border-radius: 15px;
+}
+.empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+}
+@media (max-width: 1050px) {
+  .shell {
+    padding-left: 12px;
+    padding-bottom: 88px;
+  }
+  .tabs {
+    left: 10px;
+    right: 10px;
+    top: auto;
+    bottom: 8px;
+    width: auto;
+    height: 66px;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .tab {
+    flex: 1;
+    min-height: 46px;
+  }
+  .tab:hover:after {
+    display: none;
+  }
+  .hero31,
+  .weatherHero {
+    grid-template-columns: 1fr;
+  }
+  .commandStrip {
+    grid-template-columns: repeat(6, 150px);
+  }
+}
+@media (max-width: 650px) {
+  .heroMain {
+    padding: 20px;
+  }
+  .heroMain h2 {
+    font-size: 34px;
+  }
+  .forecastSummary {
+    grid-template-columns: 1fr 1fr;
+  }
+  .sectionTitle {
+    align-items: flex-start;
+  }
+  .periodBar {
+    width: 100%;
+    overflow: auto;
+    flex-wrap: nowrap;
+  }
+  .seg {
+    flex: none;
+  }
+}
+
+.chartType {
+  display: none !important;
+}
+.metricSwitch {
+  display: flex;
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+}
+.metricSwitch button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 10px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+.metricSwitch button.active {
+  background: linear-gradient(135deg, var(--c1), #bff7ff);
+  color: #071521;
+  font-weight: 800;
+}
+.deviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+#climate .deviceGrid {
+  gap: 8px;
+}
+#climate .deviceCard {
+  padding: 11px 13px;
+  border-radius: 15px;
+}
+#climate .deviceCard h3 {
+  font-size: 17px;
+  margin: 8px 0 5px;
+}
+#climate .deviceCard .age {
+  font-size: 11px;
+}
+#climate .roomSummary .insight {
+  padding: 9px 12px;
+}
+#climate .rooms .panel {
+  padding: 12px;
+  margin-top: 10px;
+}
+.deviceCard {
+  padding: 17px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #ffffff06;
+}
+.alertsPreview .item {
+  cursor: pointer;
+}
+.alertsPreview .item:hover {
+  border-color: #ff647c66;
+}
+.modalWide {
+  width: min(760px, 94vw);
+  max-height: 85vh;
+  overflow: auto;
+}
+.outdoor {
+  background: linear-gradient(145deg, #58e1ff16, #39dc9810);
+}
+
+.scoreExplain {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #ffffff06;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.scoreTile {
+  position: relative;
+  cursor: pointer;
+}
+.scoreTile:hover {
+  border-color: #58e1ff77;
+}
+.scoreTile .tip {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 50;
+  background: #0d182b;
+  border: 1px solid #58e1ff55;
+  padding: 12px;
+  border-radius: 13px;
+  box-shadow: 0 16px 40px #000a;
+  color: #dfeaff;
+  min-width: 230px;
+}
+.scoreTile:hover .tip {
+  display: block;
+}
+.forecastSummary {
+  display: flex !important;
+  gap: 8px;
+  overflow: auto;
+  padding: 6px 0;
+}
+.forecastSummary .room,
+.forecastSummary .forecastDay {
+  min-width: 135px;
+  padding: 11px !important;
+}
+.forecastSummary h2 {
+  font-size: 24px;
+  margin: 7px 0;
+}
+.status-offline {
+  color: #ff91a3;
+  background: #ff647c20;
+}
+.status-warning {
+  color: #ffd879;
+  background: #ffc85720;
+}
+.status-online {
+  color: #7ff0bd;
+  background: #39dc9820;
+}
+.age {
+  font-size: 12px;
+  color: var(--muted);
+}
+.roomSummary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.chartRange {
+  display: flex;
+  gap: 6px;
+}
+.chartRange button {
+  padding: 7px 10px;
+}
+.weatherChart {
+  order: -1;
+}
+.weatherPrimary {
+  display: flex;
+  flex-direction: column;
+}
+.axisNote {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* One-View 3.3 */
+@media (min-width: 1051px) {
+  body {
+    overflow: hidden;
+  }
+  .shell {
+    height: 100vh;
+    overflow: hidden;
+  }
+  .view#home.active {
+    height: calc(100vh - 88px);
+    overflow: hidden;
+  }
+  .overview33 {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1.35fr 0.8fr;
+    grid-template-rows: auto auto 1fr;
+    gap: 10px;
+  }
+  .statusCompact {
+    padding: 16px 18px;
+    min-height: 118px;
+  }
+  .statusCompact h2 {
+    font-size: 30px;
+    margin: 6px 0;
+  }
+  .statusCompact .chartTools {
+    margin: 8px 0 0;
+  }
+  .scoreCompact {
+    padding: 14px;
+    grid-row: span 2;
+  }
+  .scoreCompact .score {
+    width: 116px;
+    height: 116px;
+    margin: 5px auto !important;
+  }
+  .scoreCompact .score strong {
+    font-size: 33px;
+  }
+  .scoreCompact .score:after {
+    inset: 10px;
+  }
+  .scoreCompact .insightGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  .scoreCompact .insight {
+    padding: 8px;
+    font-size: 12px;
+  }
+  .scoreCompact .scoreExplain {
+    font-size: 12px;
+    max-height: none;
+    overflow: visible;
+  }
+  .overviewKpis {
+    grid-column: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+  .overviewKpis .metric {
+    padding: 10px;
+    min-width: 0;
+  }
+  .overviewKpis .metric strong {
+    font-size: 18px;
+  }
+  .overviewBottom {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: 1.05fr 1.25fr 0.8fr;
+    gap: 10px;
+    min-height: 0;
+  }
+  .compactPanel {
+    padding: 12px;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .compactPanel h3 {
+    margin: 0 0 8px;
+  }
+  .compactRooms {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .compactRoom {
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-size: 12px;
+  }
+  .compactRoom strong {
+    font-size: 16px;
+  }
+  .miniWeatherChart {
+    height: 180px;
+  }
+  .attentionList {
+    display: grid;
+    gap: 6px;
+    max-height: none;
+    overflow: visible;
+  }
+  .attentionList .item {
+    padding: 8px;
+    font-size: 13px;
+  }
+  .attentionList .item small {
+    font-size: 12px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .heroQuick {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .heroQuick .btn {
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+}
+.smartPeriod {
+  display: flex;
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+}
+.smartPeriod button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 11px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+.smartPeriod button.active {
+  background: linear-gradient(135deg, var(--c1), #bff7ff);
+  color: #071521;
+  font-weight: 800;
+}
+.customRange {
+  display: none;
+  gap: 5px;
+}
+.customRange.show {
+  display: flex;
+}
+.graphHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.graphControls {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+@media (max-width: 1050px) {
+  .overview33 {
+    display: block;
+  }
+  .statusCompact,
+  .scoreCompact,
+  .overviewKpis,
+  .overviewBottom {
+    margin-bottom: 10px;
+  }
+  .overviewKpis {
+    display: flex;
+    overflow: auto;
+  }
+  .overviewBottom {
+    display: block;
+  }
+  .compactPanel {
+    margin-bottom: 10px;
+  }
+  .scoreCompact .insightGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .roomSummary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Overview 24h 3.6.2 */
+@media (min-width: 1051px) {
+  .overviewBottom {
+    grid-template-columns: 1.05fr 1.12fr 1.12fr 0.78fr;
+  }
+  .miniElectricChart,
+  .miniWeatherChart {
+    height: 170px;
+  }
+  .compactRooms {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .compactSpark {
+    height: 34px;
+    margin-top: 5px;
+  }
+}
+.compactSpark {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 7px;
+  background: #07112066;
+}
+.compactSpark canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+.miniElectricChart {
+  height: 170px;
+  position: relative;
+}
+.miniElectricChart > .empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.miniElectricChart > .empty[hidden] {
+  display: none;
+}
+.miniElectricChart canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+@media (max-width: 1050px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  .shell {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 10px 88px !important;
+  }
+  .view {
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+  }
+  .grid {
+    display: block !important;
+    width: 100%;
+  }
+  .panel,
+  .glass,
+  .wide,
+  .full {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+    margin: 0 0 10px;
+  }
+  .row,
+  .sectionTitle,
+  .graphHeader {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .smartPeriod,
+  .metricSwitch,
+  .seg,
+  .chartTools,
+  .graphControls {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .smartPeriod::-webkit-scrollbar,
+  .metricSwitch::-webkit-scrollbar,
+  .seg::-webkit-scrollbar,
+  .chartTools::-webkit-scrollbar {
+    display: none;
+  }
+  .smartPeriod button,
+  .metricSwitch button,
+  .seg button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .customRange.show {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    width: 100%;
+  }
+  .chart,
+  .weatherChart {
+    height: 290px !important;
+    min-height: 290px;
+    width: 100%;
+  }
+  .chart canvas,
+  .weatherChart canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .kpis {
+    grid-template-columns: 1fr 1fr;
+  }
+  .rooms,
+  .deviceGrid,
+  .comfortMatrix,
+  .formGrid {
+    grid-template-columns: 1fr !important;
+  }
+  .roomSummary {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .tabs {
+    z-index: 1000;
+  }
+  .adminNav {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+  .adminPage {
+    width: 100%;
+    overflow: hidden;
+  }
+  .overview33 {
+    display: block !important;
+    height: auto !important;
+  }
+  .overviewKpis {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+  .overviewKpis .metric:last-child {
+    grid-column: 1/-1;
+  }
+  .overviewBottom {
+    display: block !important;
+  }
+  .compactPanel {
+    width: 100%;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .compactRooms {
+    grid-template-columns: 1fr 1fr;
+  }
+  .miniElectricChart,
+  .miniWeatherChart {
+    height: 210px;
+  }
+  .miniElectricChart {
+    position: relative;
+  }
+  .miniElectricChart > .empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+  }
+  .miniElectricChart > .empty[hidden] {
+    display: none;
+  }
+  .attentionList {
+    max-height: none;
+  }
+  .scoreCompact .scoreExplain {
+    max-height: none;
+  }
+  .scoreCompact .insightGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  .shell {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  .brand h1 {
+    font-size: 16px;
+  }
+  .brand small {
+    font-size: 11px;
+  }
+  header {
+    padding: 10px;
+  }
+  .headerActions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 54px 54px;
+  }
+  .overviewKpis {
+    grid-template-columns: 1fr 1fr;
+  }
+  .overviewKpis .metric {
+    min-width: 0;
+  }
+  .overviewKpis .metric strong {
+    font-size: 16px;
+  }
+  .compactRooms {
+    grid-template-columns: 1fr;
+  }
+  .roomSummary {
+    grid-template-columns: 1fr !important;
+  }
+  .scoreCompact .insightGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .chart,
+  .weatherChart {
+    height: 260px !important;
+    min-height: 260px;
+  }
+  .smartPeriod button,
+  .metricSwitch button {
+    padding: 9px 12px;
+  }
+  .forecastSummary {
+    display: flex !important;
+  }
+  .forecastDay {
+    min-width: 125px;
+  }
+  .modalBox {
+    width: calc(100vw - 24px) !important;
+    max-width: none;
+  }
+  .tabs {
+    left: 6px;
+    right: 6px;
+  }
+}
+
+/* Overview 24h 3.6.2 */
+html,
+body {
+  overflow-y: auto !important;
+  min-height: 100%;
+}
+.shell {
+  overflow-y: auto !important;
+  min-height: 100vh;
+  height: auto !important;
+}
+.view.active {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: calc(100vh - 88px);
+}
+.seriesFilters {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+.seriesChip {
+  border: 1px solid var(--line);
+  background: #ffffff06;
+  color: var(--muted);
+  padding: 7px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.seriesChip.active {
+  color: #06121d;
+  background: var(--chip, #58e1ff);
+  font-weight: 800;
+}
+.seriesChip .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--chip, #58e1ff);
+  margin-right: 5px;
+}
+.seriesChip.active .dot {
+  background: #06121d;
+}
+.tariffControls {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.tariffTotals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 10px;
+}
+.tariffTotal {
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #ffffff06;
+}
+.tariffTotal strong {
+  font-size: 18px;
+}
+.tariffChartWrap {
+  height: 250px;
+}
+.chartMeta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+#climate .chartMeta {
+  font-size: 13px;
+  color: #c4d4e8;
+  line-height: 1.45;
+}
+#climate .seriesChip {
+  color: #dce7f6;
+  border-color: #60799f;
+  background: #111f38;
+}
+#climate .seriesChip.active {
+  color: #071521;
+}
+#climate .metricSwitch button {
+  color: #dce7f6;
+}
+#climate .metricSwitch button.active {
+  color: #071521;
+}
+@media (max-width: 1050px) {
+  html,
+  body,
+  .shell,
+  .view.active {
+    overflow-y: auto !important;
+    height: auto !important;
+  }
+  .seriesFilters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .seriesChip {
+    flex: 0 0 auto;
+  }
+  .tariffControls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .tariffControls .wideControl {
+    grid-column: 1/-1;
+  }
+  .tariffChartWrap {
+    height: 230px;
+  }
+}
+.climateWorkspace {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.82fr) minmax(0, 1.42fr);
+  gap: 12px;
+  align-items: start;
+}
+.floorPlanPanel,
+.climateChartPanel {
+  min-width: 0;
+  padding: 14px;
+}
+.floorPlanPanel > .row {
+  align-items: center;
+}
+.floorPlanCanvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1200/760;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+}
+.floorPlanCanvas img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+.floorPlanCanvas svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.planRoom {
+  fill: #60a5fa;
+  fill-opacity: 0.12;
+  stroke: #1877d2;
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill-opacity 0.15s,
+    stroke-width 0.15s;
+}
+.planRoom.mapped {
+  cursor: pointer;
+  pointer-events: auto;
+}
+.planRoom.mapped:hover,
+.planRoom.mapped.selected {
+  fill: #22d3ee;
+  fill-opacity: 0.3;
+  stroke: #0284c7;
+  stroke-width: 5;
+}
+.planRoom.unmapped {
+  fill: #94a3b8;
+  fill-opacity: 0.08;
+  stroke: #64748b;
+  stroke-dasharray: 7 6;
+  pointer-events: none;
+}
+.planNumber {
+  font:
+    800 28px Inter,
+    system-ui,
+    sans-serif;
+  fill: #0f172a;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.planReadout {
+  pointer-events: none;
+}
+.planReadout rect {
+  fill: #0b1425;
+  fill-opacity: 0.94;
+  stroke: #38bdf8;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+.planReadout text {
+  fill: #f8fafc;
+  font:
+    700 16px Inter,
+    system-ui,
+    sans-serif;
+}
+.planReadout .planValue {
+  font-size: 14px;
+  fill: #cde8ff;
+}
+.planLegend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 8px 0;
+  color: #dce7f6;
+  font-size: 11px;
+}
+.planLegend i {
+  width: 78px;
+  height: 10px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #38bdf8, #34d399, #fbbf24, #f87171);
+}
+.planActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.planActions .btn {
+  padding: 8px 10px;
+}
+.seriesChip.selected {
+  outline: 2px solid #fff;
+  outline-offset: 1px;
+}
+.climateChartPanel .chart {
+  height: 380px;
+}
+.floorPlanMetric {
+  flex: none;
+}
+.floorPlanMetric button {
+  color: #dce7f6;
+}
+@media (max-width: 1050px) {
+  .climateWorkspace {
+    grid-template-columns: 1fr;
+  }
+  .climateChartPanel .chart {
+    height: 330px;
+  }
+}
+.floorPlanCanvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2/1;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #415a73;
+}
+.floorPlanCanvas svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.planStaticRoom {
+  fill: #26394e;
+  stroke: none;
+}
+.planRoom {
+  fill: #35d5a288;
+  fill-opacity: 0.32;
+  stroke: #e1e8ef;
+  stroke-width: 5;
+  vector-effect: non-scaling-stroke;
+  transition:
+    fill 0.2s,
+    fill-opacity 0.2s,
+    stroke 0.2s;
+}
+.planRoom.unmapped {
+  fill: #64748b;
+  fill-opacity: 0.15;
+  stroke: #718096;
+  stroke-dasharray: 7 6;
+  pointer-events: none;
+}
+.planRoom.mapped {
+  cursor: pointer;
+}
+.planRoom.mapped:hover,
+.planRoom.mapped.selected {
+  stroke: #fff;
+  stroke-width: 8;
+  filter: drop-shadow(0 0 6px #55dfff99);
+}
+.planWalls path {
+  fill: none;
+  stroke: url(#plan-wall);
+  stroke-width: 18;
+  stroke-linecap: square;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+.planWalls path + path {
+  stroke-width: 10;
+}
+.planWindows path,
+.doorMarks path {
+  fill: none;
+  stroke: #dce5ef;
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+.planNumber {
+  font:
+    800 27px Inter,
+    system-ui,
+    sans-serif;
+  fill: #f8fafc;
+  paint-order: stroke;
+  stroke: #0b1727;
+  stroke-width: 5px;
+  pointer-events: none;
+}
+.planReadout {
+  pointer-events: none;
+}
+.planReadout rect {
+  fill: #10253bdc;
+  stroke: #e5edf533;
+  stroke-width: 1.5;
+}
+.planReadout text {
+  fill: #f7fbff;
+  font:
+    700 16px Inter,
+    system-ui,
+    sans-serif;
+}
+.planReadout .planValue {
+  font-size: 13px;
+  font-weight: 600;
+}
+.entryMark {
+  stroke: #35d5a2;
+  stroke-width: 6;
+}
+.entryLabel {
+  fill: #35d5a2;
+  font:
+    800 17px Inter,
+    system-ui,
+    sans-serif;
+}
+.planLegend {
+  color: #dce7f6;
+}
+.climateWorkspace {
+  grid-template-columns: 1fr !important;
+  gap: 10px;
+}
+.climateChartPanel {
+  min-width: 0;
+}
+.climateChartPanel .chart {
+  height: 165px;
+}
+.climateViewSwitch button {
+  white-space: nowrap;
+}
+.climateChartSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  gap: 10px;
+  align-items: stretch;
+}
+.climateMetricStack {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.climateMetricPanel {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid #ffffff12;
+  border-radius: 13px;
+  background: #0b1727;
+}
+.climateMetricPanel h3 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: #e7f0fb;
+}
+.climateMetricPanel .chart {
+  height: 180px;
+}
+.climateMetricPanel[hidden] {
+  display: none !important;
+}
+.climatePeriodStats {
+  padding: 12px;
+  border: 1px solid #314964;
+  border-radius: 13px;
+  background: #0b1727;
+  color: #e7f0fb;
+}
+.climatePeriodStats h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+}
+.climatePeriodStats h3 em {
+  color: #ffb44c;
+  font-style: normal;
+}
+.climatePeriodStats p {
+  color: #b9c9df;
+  font-size: 12px;
+}
+.climateStatRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 10px 0;
+  border-top: 1px solid #ffffff15;
+  color: #c3d1e3;
+  font-size: 12px;
+}
+.climateStatRow b {
+  color: #f5f8ff;
+}
+.seriesChip {
+  color: #d5e3f4 !important;
+  border-color: #526a84 !important;
+  background: #102238 !important;
+}
+.seriesChip.active {
+  border-color: var(--chip) !important;
+  background: color-mix(in srgb, var(--chip) 20%, #102238) !important;
+  color: #f6fbff !important;
+}
+.seriesChip .dot {
+  background: var(--chip);
+}
+@media (max-width: 900px) {
+  .climateChartSplit {
+    grid-template-columns: 1fr;
+  }
+  .climateMetricPanel .chart {
+    height: 185px;
+  }
+}
+
+/* Climate page: clearer chart series and a compact single-screen layout. */
+.seriesChip {
+  color: #edf6ff !important;
+  border-color: #536d89 !important;
+  background: #13283f !important;
+}
+.seriesChip.active {
+  color: #fff !important;
+}
+.seriesChip .dot {
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 50%;
+  background: var(--chip) !important;
+  box-shadow:
+    0 0 0 2px #ffffff22,
+    0 0 8px color-mix(in srgb, var(--chip), transparent 30%);
+}
+#climate .grid {
+  gap: 8px;
+  margin: 5px 0;
+}
+#climate .grid > .panel.full {
+  padding: 10px 12px;
+  margin: 0;
+}
+#climate .grid > .panel.full > .sectionTitle {
+  margin-bottom: 6px;
+}
+#climate .grid > .panel.full h2 {
+  font-size: 18px;
+  margin: 0;
+}
+#climate .grid > .panel.full .sectionTitle small {
+  font-size: 10px;
+}
+#climate .roomSummary {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0 0 6px;
+}
+#climate .roomSummary .insight {
+  padding: 7px 9px;
+  border-radius: 11px;
+  font-size: 11px;
+  line-height: 1.25;
+}
+#climate .roomSummary .insight b {
+  color: #f2f7ff;
+}
+#climate .deviceGrid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+#climate .deviceCard {
+  padding: 8px 9px;
+  border-radius: 12px;
+}
+#climate .deviceCard .row {
+  gap: 4px;
+  font-size: 11px;
+}
+#climate .deviceCard h3 {
+  font-size: 14px;
+  margin: 5px 0;
+}
+#climate .deviceCard small,
+#climate .deviceCard .age {
+  font-size: 9px;
+  line-height: 1.25;
+}
+#climate #rooms {
+  display: none !important;
+}
+#climate .climateWorkspace {
+  grid-template-columns: minmax(270px, 0.68fr) minmax(0, 1.75fr) !important;
+  gap: 8px;
+  align-items: stretch;
+}
+#climate .floorPlanPanel {
+  padding: 9px;
+  min-width: 0;
+}
+#climate .floorPlanPanel h2 {
+  font-size: 15px;
+  margin: 0;
+}
+#climate .floorPlanCanvas {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  aspect-ratio: 2/1;
+}
+#climate .floorPlanPanel .row {
+  gap: 5px;
+}
+#climate .floorPlanMetric button {
+  padding: 5px 7px;
+  font-size: 10px;
+}
+#climate .planLegend {
+  margin: 4px 0;
+  font-size: 9px;
+}
+#climate .planLegend i {
+  height: 7px;
+  width: 55px;
+}
+#climate .floorPlanPanel .chartMeta {
+  font-size: 9px;
+  margin: 3px 0;
+}
+#climate .planActions {
+  gap: 4px;
+}
+#climate .planActions .btn {
+  min-height: 28px;
+  padding: 4px 7px;
+  font-size: 10px;
+}
+#climate .climateChartPanel {
+  min-width: 0;
+  padding: 9px;
+}
+#climate .climateChartPanel h2 {
+  font-size: 16px;
+  margin: 0;
+}
+#climate .climateChartPanel > .row {
+  gap: 7px;
+  margin-bottom: 5px;
+}
+#climate .climateChartPanel .smartPeriod button {
+  padding: 5px 7px;
+  font-size: 10px;
+}
+#climate .climateChartPanel .metricSwitch button {
+  padding: 5px 7px;
+  font-size: 10px;
+}
+#climate .seriesFilters {
+  gap: 5px;
+  margin: 5px 0;
+}
+#climate .seriesChip {
+  min-height: 29px;
+  padding: 4px 8px !important;
+  font-size: 10px;
+}
+#climate .chartMeta {
+  font-size: 10px;
+  line-height: 1.3;
+  margin: 3px 0;
+}
+#climate .climateChartSplit {
+  grid-template-columns: minmax(0, 1fr) 185px;
+  gap: 7px;
+}
+#climate .climateMetricStack {
+  gap: 6px;
+}
+#climate .climateMetricPanel {
+  padding: 7px 9px;
+  border-color: #38516d;
+  background: #0b192a;
+}
+#climate .climateMetricPanel h3 {
+  font-size: 12px;
+  margin: 0 0 3px;
+  color: #f2f7ff;
+}
+#climate .climateMetricPanel .chart {
+  height: clamp(125px, 17vh, 165px);
+}
+#climate .climatePeriodStats {
+  padding: 8px;
+  background: #0b192a;
+  border-color: #38516d;
+}
+#climate .climatePeriodStats h3 {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+#climate .climateStatRow {
+  padding: 7px 0;
+  gap: 4px;
+  font-size: 10px;
+}
+#climate .climateStatRow b {
+  font-size: 11px;
+}
+@media (max-width: 1050px) {
+  #climate .climateWorkspace {
+    grid-template-columns: 1fr !important;
+  }
+  #climate .floorPlanCanvas {
+    max-width: 620px;
+  }
+  #climate .deviceGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  #climate .roomSummary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #climate .climateChartSplit {
+    grid-template-columns: 1fr;
+  }
+  #climate .climateMetricPanel .chart {
+    height: 180px;
+  }
+  #climate .climatePeriodStats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+}
+
+/* Climate layout: information cards left, readable vector plan right. */
+@media (min-width: 1051px) {
+  #climate > .grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.05fr) minmax(390px, 0.95fr) !important;
+    gap: 8px;
+    margin: 5px 0;
+  }
+  #climate > .grid > .panel.full {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    align-self: start;
+    padding: 10px 12px;
+    margin: 0;
+  }
+  #climate .climateWorkspace {
+    display: contents !important;
+  }
+  #climate .floorPlanPanel {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: stretch;
+    padding: 10px;
+  }
+  #climate .climateChartPanel {
+    grid-column: 1/-1 !important;
+    grid-row: 2 !important;
+    min-width: 0;
+    padding: 10px;
+  }
+  #climate .floorPlanCanvas {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    aspect-ratio: 2/1;
+    margin: 0 auto;
+  }
+}
+@media (max-width: 1050px) {
+  #climate .climateWorkspace {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+  #climate .floorPlanCanvas {
+    max-width: 620px;
+  }
+}
+#climate .planReadout rect {
+  fill: #091b2def;
+  stroke: #e9f4ffb0;
+  stroke-width: 2.5;
+}
+#climate .planReadout .planName {
+  font-size: 30px !important;
+  font-weight: 800 !important;
+  fill: #fff !important;
+  stroke: #071321;
+  stroke-width: 2.5px !important;
+}
+#climate .planReadout .planValue {
+  font-size: 25px !important;
+  font-weight: 800 !important;
+  fill: #f8fcff !important;
+  stroke: #071321;
+  stroke-width: 2px !important;
+}
+#climate .planNumber {
+  font-size: 30px;
+  fill: #fff;
+  stroke: #071321;
+  stroke-width: 5px;
+}
+#climate .climateMetricPanel .chart {
+  height: clamp(130px, 18vh, 175px);
+}
+#climate .seriesChip .dot {
+  width: 10px !important;
+  height: 10px !important;
+  box-shadow:
+    0 0 0 2px #fff5,
+    0 0 10px var(--chip) !important;
+}
+/* Climate charts side by side on wide screens. */
+.climateChartSplit {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 210px !important;
+  gap: 10px;
+}
+.climateMetricStack {
+  display: contents !important;
+}
+.climateMetricPanel .chart {
+  height: 250px !important;
+}
+.climatePeriodStats {
+  align-self: stretch;
+}
+@media (max-width: 1200px) {
+  .climateChartSplit {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .climatePeriodStats {
+    grid-column: 1/-1;
+  }
+  .climateMetricPanel .chart {
+    height: 230px !important;
+  }
+}
+@media (max-width: 900px) {
+  .climateChartSplit {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .climatePeriodStats {
+    grid-column: auto;
+  }
+  .climateMetricPanel .chart {
+    height: 200px !important;
+  }
+} /* Compact climate screen: summary row, room details and plan left, charts right. */
+#climate > .grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.28fr);
+  grid-template-areas: "title title" "summary summary" "devices charts" "plan charts";
+  gap: 8px;
+  align-items: stretch;
+  margin: 6px 0;
+}
+#climate > .grid > .panel.full {
+  display: contents !important;
+}
+#climate .sectionTitle {
+  grid-area: title;
+  margin: 0;
+  padding: 0 2px;
+}
+#climate .roomSummary {
+  grid-area: summary;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+}
+#climate #devicesGrid {
+  grid-area: devices;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  align-self: start;
+}
+#climate .deviceCard {
+  padding: 7px 8px;
+  min-height: 64px;
+}
+#climate .deviceCard h3 {
+  font-size: 13px;
+  margin: 3px 0;
+}
+#climate .deviceCard small,
+#climate .deviceCard .age {
+  font-size: 10px;
+  line-height: 1.2;
+}
+#climate .climateWorkspace {
+  display: contents !important;
+}
+#climate .floorPlanPanel {
+  grid-area: plan;
+  min-width: 0;
+  padding: 9px;
+  align-self: start;
+}
+#climate .floorPlanPanel > .row {
+  margin-bottom: 5px;
+}
+#climate .floorPlanCanvas {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  max-height: 230px;
+  aspect-ratio: 2/1;
+}
+#climate .planLegend {
+  margin: 4px 0;
+  font-size: 10px;
+}
+#climate .planActions {
+  gap: 5px;
+}
+#climate .planActions .btn {
+  padding: 5px 7px;
+  font-size: 11px;
+}
+#climate .climateChartPanel {
+  grid-area: charts;
+  min-width: 0;
+  padding: 9px;
+  align-self: stretch;
+}
+#climate .climateChartPanel > .row {
+  align-items: flex-start;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+#climate .climateChartPanel h2 {
+  font-size: 16px;
+}
+#climate .climateChartPanel .smartPeriod button,
+#climate .climateChartPanel .metricSwitch button {
+  padding: 5px 7px;
+  font-size: 11px;
+}
+#climate #climateRoomFilters {
+  gap: 5px;
+  margin: 4px 0;
+}
+#climate .seriesChip {
+  padding: 5px 7px;
+  font-size: 11px;
+}
+#climate .climateChartMeta {
+  font-size: 11px;
+  margin: 3px 0 6px;
+}
+#climate .climateChartSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas: "stats stats" "temperature humidity";
+  gap: 7px;
+  align-items: stretch;
+}
+#climate .climateMetricStack {
+  display: contents !important;
+}
+#climate #climateTemperaturePanel {
+  grid-area: temperature;
+}
+#climate #climateHumidityPanel {
+  grid-area: humidity;
+}
+#climate .climateMetricPanel {
+  min-width: 0;
+  padding: 7px 8px;
+}
+#climate .climateMetricPanel h3 {
+  font-size: 12px;
+  margin: 0 0 4px;
+}
+#climate .climateMetricPanel .chart {
+  height: 230px !important;
+}
+#climate #climatePeriodStats {
+  grid-area: stats;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px 10px;
+  padding: 7px 9px;
+}
+#climate #climatePeriodStats h3 {
+  grid-column: 1/-1;
+  margin: 0 0 2px;
+  font-size: 12px;
+}
+#climate .climateStatRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  padding: 5px 0;
+  border-top: 1px solid #ffffff15;
+  font-size: 11px;
+}
+#climate .climateStatRow b {
+  width: 100%;
+  font-size: 11px;
+}
+@media (max-width: 1050px) {
+  #climate > .grid {
+    grid-template-columns: minmax(270px, 0.7fr) minmax(0, 1.3fr);
+    gap: 7px;
+  }
+  #climate .climateMetricPanel .chart {
+    height: 205px !important;
+  }
+}
+@media (max-width: 760px) {
+  #climate > .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "title" "summary" "devices" "plan" "charts";
+  }
+  #climate .roomSummary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #climate #devicesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #climate .climateChartSplit {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "stats" "temperature" "humidity";
+  }
+  #climate #climatePeriodStats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #climate .climateMetricPanel .chart {
+    height: 185px !important;
+  }
+} /* Readable compact floor plan and single-screen climate layout. */
+#climate > .grid {
+  grid-template-columns: minmax(420px, 0.86fr) minmax(0, 1.14fr);
+}
+#climate .floorPlanPanel .floorPlanCanvas {
+  height: auto;
+  max-height: 230px;
+  aspect-ratio: 2/1;
+}
+#climate .planNumber {
+  font-size: 34px;
+}
+#climate .planReadout text {
+  font-size: 24px;
+}
+#climate .planReadout .planValue {
+  font-size: 21px;
+}
+#climate .climateMetricPanel .chart {
+  height: 210px !important;
+}
+@media (max-width: 1050px) {
+  #climate > .grid {
+    grid-template-columns: minmax(330px, 0.8fr) minmax(0, 1.2fr);
+  }
+  #climate .planReadout text {
+    font-size: 27px;
+  }
+  #climate .planReadout .planValue {
+    font-size: 23px;
+  }
+}
+@media (max-width: 760px) {
+  #climate > .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #climate .planNumber {
+    font-size: 27px;
+  }
+  #climate .planReadout text {
+    font-size: 24px;
+  }
+  #climate .planReadout .planValue {
+    font-size: 21px;
+  }
+} /* Final grid placement overrides for the compact climate layout. */
+#climate > .grid {
+  grid-template-columns: minmax(420px, 0.86fr) minmax(0, 1.14fr) !important;
+  grid-template-areas: "title title" "summary summary" "devices charts" "plan charts" !important;
+}
+#climate .floorPlanPanel {
+  grid-column: 1 !important;
+  grid-row: 4 !important;
+}
+#climate .climateChartPanel {
+  grid-column: 2 !important;
+  grid-row: 3/5 !important;
+}
+@media (max-width: 760px) {
+  #climate > .grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "title" "summary" "devices" "plan" "charts" !important;
+  }
+  #climate .floorPlanPanel {
+    grid-column: 1 !important;
+    grid-row: 4 !important;
+  }
+  #climate .climateChartPanel {
+    grid-column: 1 !important;
+    grid-row: 5 !important;
+  }
+} /* Allocate more of the compact climate workspace to the charts. */
+#climate > .grid {
+  grid-template-columns: minmax(330px, 0.64fr) minmax(0, 1.36fr) !important;
+}
+#climate .climateChartPanel {
+  width: 100%;
+  min-width: 0;
+}
+#climate .climateChartSplit {
+  width: 100%;
+  max-width: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 8px;
+}
+#climate #climatePeriodStats {
+  width: 100%;
+  grid-column: 1/-1 !important;
+}
+@media (max-width: 760px) {
+  #climate > .grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  #climate .climateChartSplit {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+/* Floor plan: lighter wall weight, clearer room boundaries and non-overflowing sensor labels. */
+#climate .planWalls path {
+  stroke-width: 3.7px !important;
+  filter: drop-shadow(0 1px 1px #08111e88);
+}
+#climate .planWalls path + path {
+  stroke-width: 1.7px !important;
+  filter: none;
+}
+#climate .planRoom {
+  stroke: #e7f0fa !important;
+  stroke-width: 2.25px !important;
+}
+#climate .planRoom.mapped:hover,
+#climate .planRoom.mapped.selected {
+  stroke: #fff !important;
+  stroke-width: 3.5px !important;
+  filter: drop-shadow(0 0 4px #55dfff88);
+}
+#climate .planReadout {
+  filter: drop-shadow(0 2px 3px #02081799);
+}
+#climate .planReadout rect {
+  fill: #07182bef !important;
+  stroke: #b8d5eb !important;
+  stroke-width: 1.5px !important;
+}
+#climate .planName {
+  font-size: 30px !important;
+  stroke-width: 1.5px !important;
+}
+#climate .planValue {
+  font-size: 24px !important;
+  stroke-width: 1px !important;
+}
+#climate .planWindows path,
+#climate .doorMarks path {
+  stroke: #edf5ff !important;
+  stroke-width: 3.5px !important;
+}
+
+/* Compact the overview metrics and fit the score card to their row. */
+@media (min-width: 1051px) {
+  .overview33 {
+    display: grid !important;
+    height: 100% !important;
+    grid-template-columns: minmax(0, 1.35fr) minmax(390px, 0.8fr) !important;
+    grid-template-rows: auto auto minmax(0, 1fr) !important;
+    gap: 10px;
+  }
+  .scoreCompact {
+    grid-row: span 2;
+    padding: 10px 14px;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .scoreCompact .score {
+    width: 86px;
+    height: 86px;
+    margin: 0 auto !important;
+    flex: none;
+  }
+  .scoreCompact .score strong {
+    font-size: 28px;
+  }
+  .scoreCompact .insightGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px;
+  }
+  .scoreCompact .insight {
+    padding: 5px 7px;
+    font-size: 11px;
+    line-height: 1.15;
+  }
+  .scoreCompact .scoreExplain {
+    margin-top: 6px;
+    padding: 7px 9px;
+    font-size: 11px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .overviewKpis {
+    align-self: stretch;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    min-height: 82px;
+  }
+  .overviewKpis .metric {
+    min-width: 0;
+    min-height: 0;
+    padding: 10px 11px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+  }
+  .overviewKpis .metric span {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    line-height: 1.15;
+  }
+  .overviewKpis .metric strong {
+    font-size: 19px;
+    margin-top: 2px;
+  }
+  .overviewKpis .metric small:empty {
+    display: none;
+  }
+}
+
+/* Small room charts: show compact, fixed scales and 24-hour endpoints. */
+@media (min-width: 1051px) {
+  .compactRoom .compactSpark {
+    height: 54px !important;
+    margin-top: 6px !important;
+    background: #071120a8;
+    border: 1px solid #263b59;
+    border-radius: 8px;
+  }
+}
+@media (max-width: 1050px) {
+  .compactRoom .compactSpark {
+    height: 64px !important;
+    margin-top: 7px !important;
+    background: #071120a8;
+    border: 1px solid #263b59;
+    border-radius: 8px;
+  }
+}
+
+/* Energy one-screen layout */
+@media (min-width: 1051px) and (min-height: 700px) {
+  #energy.view.active {
+    height: calc(100vh - 102px);
+    min-height: 0;
+    overflow: hidden !important;
+  }
+  #energy > .grid {
+    height: calc(100% - 28px);
+    margin: 14px 0;
+    gap: 10px;
+    grid-template-rows: minmax(220px, 1.1fr) minmax(76px, 0.34fr) minmax(
+        220px,
+        1fr
+      );
+    align-content: stretch;
+  }
+  #energy > .grid > .panel {
+    padding: 12px;
+    border-radius: 18px;
+    min-height: 0;
+  }
+  #energy > .grid > .panel:first-child {
+    display: flex;
+    flex-direction: column;
+  }
+  #energy > .grid > .panel:first-child .row {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  #energy > .grid > .panel:first-child h2 {
+    font-size: 20px;
+    margin: 0;
+  }
+  #energy > .grid > .panel:first-child .chartMeta {
+    font-size: 10px;
+  }
+  #energy > .grid > .panel:first-child .chart {
+    height: clamp(150px, 22vh, 205px);
+    min-height: 0;
+    flex: 1;
+  }
+  #energy > .grid > .panel:nth-child(2),
+  #energy > .grid > .panel:nth-child(3),
+  #energy > .grid > .panel:nth-child(4) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  #energy > .grid > .panel:nth-child(2) h3,
+  #energy > .grid > .panel:nth-child(3) h3,
+  #energy > .grid > .panel:nth-child(4) h3 {
+    font-size: 15px;
+    margin: 0 0 5px;
+  }
+  #energy > .grid > .panel:nth-child(2) b,
+  #energy > .grid > .panel:nth-child(3) b,
+  #energy > .grid > .panel:nth-child(4) b {
+    font-size: 17px;
+  }
+  #energy > .grid > .panel:nth-child(5) {
+    display: flex;
+    flex-direction: column;
+  }
+  #energy > .grid > .panel:nth-child(5) .sectionTitle {
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  #energy > .grid > .panel:nth-child(5) .sectionTitle h3 {
+    font-size: 16px;
+    margin: 0 0 3px;
+  }
+  #energy > .grid > .panel:nth-child(5) .sectionTitle small {
+    font-size: 10px;
+  }
+  #energy > .grid > .panel:nth-child(5) .tariffControls {
+    gap: 5px;
+  }
+  #energy > .grid > .panel:nth-child(5) .tariffControls .input,
+  #energy > .grid > .panel:nth-child(5) .tariffControls .btn {
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+  #energy > .grid > .panel:nth-child(5) .tariffChartWrap {
+    height: clamp(115px, 16vh, 145px);
+    min-height: 0;
+  }
+  #energy > .grid > .panel:nth-child(5) .tariffTotals {
+    gap: 7px;
+    margin-top: 7px;
+  }
+  #energy > .grid > .panel:nth-child(5) .tariffTotal {
+    padding: 7px 9px;
+  }
+  #energy > .grid > .panel:nth-child(5) .tariffTotal strong {
+    font-size: 14px;
+  }
+  #energy > .grid > .panel:nth-child(6) h3 {
+    font-size: 16px;
+    margin: 0 0 8px;
+  }
+  #energy > .grid > .panel:nth-child(6) .list {
+    gap: 7px;
+  }
+  #energy > .grid > .panel:nth-child(6) .item {
+    padding: 9px 10px;
+  }
+}
+
+.logo {
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.logo:after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(145deg, #ffffff20, transparent 52%);
+  pointer-events: none;
+}
+.brandLogoMark {
+  width: 29px;
+  height: 29px;
+  display: block;
+  filter: drop-shadow(0 2px 4px #07152288);
+  position: relative;
+  z-index: 1;
+}
+
+/* TarON official brand assets */
+.brandLogoFull {
+  width: 150px;
+  height: auto;
+  display: block;
+  flex: 0 0 auto;
+}
+.brandAvatar {
+  display: none;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+}
+.brandCaption {
+  display: grid;
+  gap: 2px;
+  padding-left: 11px;
+  border-left: 1px solid var(--line);
+}
+.brandCaption b {
+  font-size: 13px;
+  line-height: 1.2;
+}
+.brandCaption small {
+  font-size: 10px;
+  white-space: nowrap;
+}
+@media (max-width: 650px) {
+  .brandLogoFull {
+    display: none;
+  }
+  .brandAvatar {
+    display: block;
+    width: 38px;
+    height: 38px;
+  }
+  .brandCaption {
+    padding-left: 8px;
+  }
+  .brandCaption small {
+    display: none;
+  }
+}
+
+/* Mobile home screen: brand, score summary, cards and safe bottom navigation. */
+@media (max-width: 650px) {
+  .shell {
+    padding: 8px 8px calc(100px + env(safe-area-inset-bottom)) !important;
+  }
+  header.glass {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 9px;
+    margin-bottom: 8px;
+    border-radius: 16px;
+  }
+  .brand {
+    min-width: 0;
+    gap: 7px;
+    align-items: center;
+  }
+  .brandLogoFull {
+    display: block;
+    width: 140px;
+    max-width: 46vw;
+    height: auto;
+  }
+  .brandAvatar {
+    display: none;
+  }
+  .brandCaption {
+    padding-left: 7px;
+    border-left: 1px solid var(--line);
+  }
+  .brandCaption b {
+    font-size: 12px;
+  }
+  .brandCaption small {
+    display: none;
+  }
+  .headerActions {
+    width: auto !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    min-width: 0;
+  }
+  .headerActions #updated {
+    display: none;
+  }
+  .headerActions #mode {
+    width: 62px;
+    min-width: 0;
+    padding: 7px 4px;
+    font-size: 10px;
+    overflow: hidden;
+  }
+  .headerActions .btn {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    padding: 5px;
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+  }
+  #home .overview33 {
+    display: flex !important;
+    flex-direction: column;
+    gap: 8px;
+    height: auto !important;
+  }
+  #home .statusCompact {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 3px 8px;
+    padding: 10px 11px;
+    min-height: 0;
+    margin: 0 0 0;
+    border-radius: 16px;
+  }
+  #home .statusCompact #statusPill {
+    grid-column: 1/-1;
+    justify-self: start;
+    padding: 4px 8px;
+    font-size: 10px;
+    line-height: 1.15;
+  }
+  #home .statusCompact h2 {
+    grid-column: 1/-1;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: -0.25px;
+    margin: 1px 0 2px;
+  }
+  #home .statusCompact #heroText {
+    grid-column: 1;
+    min-width: 0;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  #home .heroQuick {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    margin: 0;
+  }
+  #home .heroQuick .btn {
+    padding: 6px 8px;
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  #home #heroRefresh {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-size: 0;
+    display: grid;
+    place-items: center;
+  }
+  #home #heroRefresh:before {
+    content: "↻";
+    font-size: 16px;
+  }
+  #home .heroQuick [data-go="admin"] {
+    display: none;
+  }
+  #home .scoreCompact {
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 7px 10px;
+    padding: 10px 11px;
+    margin: 0 0 0;
+    min-height: 0;
+    border-radius: 16px;
+  }
+  #home .scoreCompact > .row {
+    grid-column: 1/-1;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+  }
+  #home .scoreCompact > .row b {
+    font-size: 13px;
+  }
+  #home .scoreCompact > .row small {
+    font-size: 10px;
+  }
+  #home .scoreCompact .score {
+    grid-column: 1;
+    grid-row: 2;
+    width: 76px;
+    height: 76px;
+    margin: 0 !important;
+    align-self: center;
+  }
+  #home .scoreCompact .score:after {
+    inset: 7px;
+  }
+  #home .scoreCompact .score strong {
+    font-size: 23px;
+  }
+  #home .scoreCompact .insightGrid {
+    grid-column: 2;
+    grid-row: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+    margin: 0;
+  }
+  #home .scoreCompact .insight {
+    min-width: 0;
+    padding: 5px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    line-height: 1.15;
+  }
+  #home .scoreCompact .insight b {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+  #home .scoreCompact .insight strong {
+    font-size: 12px;
+  }
+  #home .scoreCompact .insight:nth-child(n + 5) {
+    display: none;
+  }
+  #home .scoreCompact .tip,
+  #home .scoreCompact .scoreExplain {
+    display: none !important;
+  }
+  #home .overviewKpis {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 7px;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  #home .overviewKpis .metric {
+    grid-column: auto !important;
+    min-width: 0;
+    min-height: 68px;
+    padding: 8px 9px;
+    border-radius: 13px;
+    gap: 2px;
+  }
+  #home .overviewKpis .metric span {
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #home .overviewKpis .metric strong {
+    font-size: 15px;
+    line-height: 1.2;
+    margin: 2px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #home .overviewKpis .metric small {
+    font-size: 10px;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #home .overviewBottom {
+    display: flex !important;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+  }
+  #home .overviewBottom > .compactPanel {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    border-radius: 16px;
+  }
+  #home .compactPanel h3 {
+    font-size: 15px;
+    line-height: 1.2;
+    margin: 0;
+  }
+  #home .compactPanel > .row {
+    align-items: center !important;
+    flex-wrap: nowrap;
+    gap: 6px;
+    margin-bottom: 7px;
+  }
+  #home .compactPanel > .row h3 {
+    min-width: 0;
+    flex: 1;
+  }
+  #home .compactPanel > .row .btn {
+    flex: 0 0 auto;
+    padding: 5px 7px;
+    font-size: 10px;
+  }
+  #home .compactRooms {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px;
+  }
+  #home .compactRoom {
+    min-width: 0;
+    padding: 7px;
+    border-radius: 11px;
+  }
+  #home .compactRoom .row {
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 3px;
+  }
+  #home .compactRoom .row b {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 10px;
+  }
+  #home .compactRoom .row span {
+    flex: 0 0 auto;
+    font-size: 10px;
+  }
+  #home .compactRoom strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  #home .compactRoom .age {
+    font-size: 9px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #home .compactRoom .compactSpark {
+    height: 48px !important;
+    margin-top: 5px !important;
+  }
+  #home .miniElectricChart,
+  #home .miniWeatherChart {
+    height: 165px;
+  }
+  #home .attentionList {
+    gap: 5px;
+  }
+  #home .attentionList .item {
+    padding: 7px 8px;
+    font-size: 11px;
+  }
+  #home .attentionList .item small {
+    font-size: 10px;
+    line-height: 1.25;
+    -webkit-line-clamp: 2;
+  }
+  .tabs {
+    left: 7px !important;
+    right: 7px !important;
+    top: auto !important;
+    bottom: calc(7px + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    height: 66px !important;
+    min-height: 66px;
+    padding: 5px 3px !important;
+    gap: 2px;
+    display: flex;
+    flex-direction: row !important;
+    align-items: stretch;
+    justify-content: space-between;
+    overflow: hidden;
+    border-radius: 17px;
+    backdrop-filter: blur(18px);
+  }
+  .tabs .tab {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 0;
+    padding: 4px 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-size: 0;
+    white-space: nowrap;
+    border-radius: 12px;
+  }
+  .tabs .tab:before {
+    font-size: 18px;
+    line-height: 1;
+  }
+  .tabs .tab:after {
+    content: attr(data-label);
+    display: block;
+    position: static;
+    left: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 650;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .tabs .tab.active:after {
+    color: var(--text);
+  }
+}
+@media (max-width: 360px) {
+  .brandCaption {
+    display: none;
+  }
+  .brandLogoFull {
+    width: 140px;
+  }
+  .headerActions #mode {
+    width: 54px;
+  }
+  .tabs .tab:after {
+    font-size: 8px;
+  }
+}
+@media (min-width: 1051px) {
+  .overviewKpis {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Climate mobile refinement: compact cards, plan and readable charts. */
+@media (max-width: 650px) {
+  #climate > .grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin: 4px 0 !important;
+  }
+  #climate > .grid > .panel.full {
+    order: 0;
+    display: block !important;
+    width: 100%;
+    min-width: 0;
+    padding: 10px !important;
+    margin: 0 !important;
+  }
+  #climate .roomSummary,
+  #climate #devicesGrid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+  #climate .roomSummary .insight {
+    min-width: 0;
+    min-height: 0;
+    padding: 8px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+  }
+  #climate .roomSummary .insight b {
+    font-size: 11px !important;
+  }
+  #climate .deviceCard {
+    min-width: 0;
+    padding: 8px !important;
+    border-radius: 12px !important;
+  }
+  #climate .deviceCard .row {
+    align-items: flex-start;
+    gap: 4px !important;
+  }
+  #climate .deviceCard h3 {
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    margin: 4px 0 !important;
+  }
+  #climate .deviceCard .age,
+  #climate .deviceCard small {
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+  }
+  #climate .climateWorkspace {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    min-width: 0;
+  }
+  #climate .floorPlanPanel,
+  #climate .climateChartPanel {
+    width: 100%;
+    min-width: 0;
+    padding: 10px !important;
+  }
+  #climate .floorPlanPanel > .row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+  }
+  #climate .floorPlanPanel h2 {
+    font-size: 15px !important;
+  }
+  #climate .floorPlanMetric {
+    flex: 0 0 auto;
+  }
+  #climate .floorPlanMetric button {
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+  }
+  #climate .floorPlanCanvas {
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+    aspect-ratio: 1.85/1 !important;
+    margin: 7px auto !important;
+  }
+  #climate .planLegend {
+    gap: 6px !important;
+    margin: 3px 0 !important;
+    font-size: 9px !important;
+  }
+  #climate .planLegend i {
+    width: 48px !important;
+    height: 7px !important;
+  }
+  #climate .floorPlanPanel .chartMeta {
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+    margin: 4px 0 !important;
+  }
+  #climate .planActions {
+    gap: 5px !important;
+  }
+  #climate .planActions .btn {
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+  }
+  #climate .climateChartPanel > .row {
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+  }
+  #climate .climateChartPanel .smartPeriod,
+  #climate .climateChartPanel .metricSwitch {
+    max-width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none;
+  }
+  #climate .climateChartPanel .smartPeriod::-webkit-scrollbar,
+  #climate .climateChartPanel .metricSwitch::-webkit-scrollbar,
+  #climate #climateRoomFilters::-webkit-scrollbar {
+    display: none;
+  }
+  #climate .climateChartPanel .smartPeriod button,
+  #climate .climateChartPanel .metricSwitch button {
+    flex: 0 0 auto;
+    padding: 7px 9px !important;
+    font-size: 10px !important;
+  }
+  #climate #climateRoomFilters {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+    gap: 5px !important;
+    margin: 5px 0 !important;
+    padding: 2px 1px 5px !important;
+  }
+  #climate #climateRoomFilters .seriesChip {
+    flex: 0 0 auto;
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+  }
+  #climate .climateChartMeta {
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+    margin: 2px 0 6px !important;
+  }
+  #climate .climateChartSplit {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+  }
+  #climate #climatePeriodStats {
+    display: block !important;
+    width: 100%;
+    padding: 8px !important;
+  }
+  #climate #climatePeriodStats h3 {
+    font-size: 12px !important;
+    margin: 0 0 4px !important;
+  }
+  #climate .climateStatRow {
+    display: flex !important;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px 9px !important;
+    padding: 6px 0 !important;
+    font-size: 10px !important;
+  }
+  #climate .climateStatRow b {
+    width: 100%;
+    font-size: 11px !important;
+  }
+  #climate .climateMetricPanel {
+    padding: 8px !important;
+    border-radius: 12px !important;
+  }
+  #climate .climateMetricPanel h3 {
+    font-size: 12px !important;
+    margin: 0 0 3px !important;
+  }
+  #climate .climateMetricPanel .chart {
+    height: 205px !important;
+  }
+}
+
+/* Energy mobile refinement: shorter controls and compact summaries. */
+@media (max-width: 650px) {
+  #energy.view.active {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+  #energy > .grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-auto-flow: row;
+    gap: 8px !important;
+    margin: 4px 0 !important;
+  }
+  #energy > .grid > .panel:first-child {
+    grid-column: 1/-1 !important;
+    min-width: 0;
+    padding: 10px !important;
+    border-radius: 16px !important;
+  }
+  #energy > .grid > .panel:first-child > .row {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 7px !important;
+    min-width: 0;
+  }
+  #energy > .grid > .panel:first-child h2 {
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+  }
+  #energy > .grid > .panel:first-child .chartMeta {
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+    margin: 2px 0 !important;
+  }
+  #energy > .grid > .panel:first-child .smartPeriod,
+  #energy > .grid > .panel:first-child .metricSwitch {
+    display: flex !important;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none;
+    gap: 2px !important;
+  }
+  #energy > .grid > .panel:first-child .smartPeriod::-webkit-scrollbar,
+  #energy > .grid > .panel:first-child .metricSwitch::-webkit-scrollbar {
+    display: none;
+  }
+  #energy > .grid > .panel:first-child .smartPeriod button,
+  #energy > .grid > .panel:first-child .metricSwitch button {
+    flex: 0 0 auto;
+    padding: 7px 9px !important;
+    font-size: 10px !important;
+    white-space: nowrap;
+  }
+  #energy > .grid > .panel:first-child .customRange {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  #energy > .grid > .panel:first-child .chartType {
+    max-width: 135px;
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+  #energy > .grid > .panel:first-child > .chart {
+    height: 230px !important;
+    min-height: 0 !important;
+    margin-top: 2px;
+  }
+  #energy > .grid > .panel:nth-child(2),
+  #energy > .grid > .panel:nth-child(3),
+  #energy > .grid > .panel:nth-child(4) {
+    grid-column: auto !important;
+    min-width: 0;
+    min-height: 0 !important;
+    padding: 10px 8px !important;
+    border-radius: 13px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+  }
+  #energy > .grid > .panel:nth-child(2) h3,
+  #energy > .grid > .panel:nth-child(3) h3,
+  #energy > .grid > .panel:nth-child(4) h3 {
+    font-size: 11px !important;
+    line-height: 1.2;
+    margin: 0 !important;
+    overflow-wrap: anywhere;
+  }
+  #energy > .grid > .panel:nth-child(2) b,
+  #energy > .grid > .panel:nth-child(3) b,
+  #energy > .grid > .panel:nth-child(4) b {
+    font-size: 14px !important;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+  #energy > .grid > .panel:nth-child(5),
+  #energy > .grid > .panel:nth-child(6) {
+    grid-column: 1/-1 !important;
+    min-width: 0;
+    padding: 10px !important;
+    border-radius: 16px !important;
+  }
+  #energy > .grid > .panel:nth-child(5) .sectionTitle {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 7px;
+    margin-bottom: 4px;
+  }
+  #energy > .grid > .panel:nth-child(5) .sectionTitle h3 {
+    font-size: 15px !important;
+    margin: 0 !important;
+  }
+  #energy > .grid > .panel:nth-child(5) .sectionTitle small {
+    font-size: 10px !important;
+    line-height: 1.25;
+  }
+  #energy .tariffControls {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    width: 100%;
+  }
+  #energy .tariffField {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3px;
+    min-width: 0;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  #energy .tariffField input {
+    width: 100%;
+    min-width: 0;
+    padding: 8px !important;
+    font-size: 12px !important;
+  }
+  #energy .tariffMonthField,
+  #energy .tariffControls #tariffApply {
+    grid-column: 1/-1 !important;
+  }
+  #energy .tariffControls #tariffApply {
+    min-height: 38px;
+    padding: 7px 10px !important;
+    font-size: 11px !important;
+  }
+  #energy .tariffControls .wideControl {
+    grid-column: auto !important;
+  }
+  #energy .tariffChartWrap {
+    height: 190px !important;
+    margin: 5px 0 0;
+  }
+  #energy .tariffTotals {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    margin-top: 6px !important;
+  }
+  #energy .tariffTotal {
+    min-width: 0;
+    padding: 8px !important;
+    border-radius: 12px !important;
+    font-size: 11px;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  #energy .tariffTotal strong {
+    font-size: 14px !important;
+  }
+  #energy > .grid > .panel:nth-child(6) h3 {
+    font-size: 15px !important;
+    margin: 0 0 7px !important;
+  }
+  #energy #energyInsights {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px !important;
+  }
+  #energy #energyInsights .item {
+    min-width: 0;
+    min-height: 0;
+    padding: 9px 10px !important;
+    font-size: 11px;
+    line-height: 1.3;
+  }
+}
+
+/* Weather desktop layout: forecast chart with current conditions and week beside it. */
+@media (min-width: 1051px) {
+  #weather.view.active {
+    height: calc(100vh - 88px);
+    min-height: 0;
+    overflow: auto !important;
+  }
+  #weather > .weatherPrimary {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.65fr) minmax(320px, 0.85fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 12px;
+    min-height: calc(100vh - 108px);
+    align-items: stretch;
+  }
+  #weather > .weatherPrimary > .premiumPanel {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 14px;
+  }
+  #weather > .weatherPrimary > .premiumPanel .sectionTitle {
+    align-items: center;
+    gap: 8px;
+  }
+  #weather > .weatherPrimary > .premiumPanel h2 {
+    font-size: 20px;
+    margin: 0;
+  }
+  #weather > .weatherPrimary > .premiumPanel .sectionTitle small {
+    font-size: 11px;
+  }
+  #weather > .weatherPrimary > .premiumPanel #weatherMetric {
+    width: auto;
+    max-width: 60%;
+    flex: 0 1 auto;
+  }
+  #weather > .weatherPrimary > .premiumPanel #weatherMetric button {
+    font-size: 11px;
+    padding: 7px 9px;
+  }
+  #weather .weatherChart {
+    height: auto !important;
+    min-height: 300px !important;
+    flex: 1;
+    order: 0;
+  }
+  #weather > .weatherPrimary > .weatherHero {
+    grid-column: 2;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 10px;
+    min-height: 0;
+  }
+  #weather .weatherNow {
+    padding: 16px;
+    border-radius: 18px;
+  }
+  #weather .weatherNow .big {
+    font-size: 36px;
+    line-height: 1.15;
+  }
+  #weather .weatherNow p {
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  #weather .weatherNow .insight {
+    padding: 10px;
+    font-size: 12px;
+  }
+  #weather .forecastBlock {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--panel);
+  }
+  #weather .forecastBlock h3 {
+    font-size: 15px;
+    margin: 0 0 8px;
+  }
+  #weather .forecastSummary {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    padding: 0;
+    gap: 7px;
+  }
+  #weather .forecastDay {
+    min-width: 0;
+    padding: 10px !important;
+    border-radius: 13px;
+  }
+  #weather .forecastDay h2 {
+    font-size: 21px;
+    margin: 3px 0;
+  }
+}
+/* Weather tablet and mobile layout. */
+@media (max-width: 1050px) {
+  #weather > .weatherPrimary {
+    display: flex !important;
+    flex-direction: column;
+    gap: 8px;
+  }
+  #weather > .weatherPrimary > .premiumPanel {
+    order: 1;
+    padding: 12px !important;
+    border-radius: 16px !important;
+  }
+  #weather > .weatherPrimary > .premiumPanel .sectionTitle {
+    gap: 7px;
+    margin-bottom: 5px;
+  }
+  #weather > .weatherPrimary > .premiumPanel h2 {
+    font-size: 18px !important;
+    line-height: 1.2;
+    margin: 0;
+  }
+  #weather > .weatherPrimary > .premiumPanel .sectionTitle small {
+    font-size: 10px;
+    line-height: 1.3;
+  }
+  #weather > .weatherPrimary > .premiumPanel #weatherMetric {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+    gap: 3px;
+    padding: 4px;
+  }
+  #weather > .weatherPrimary > .premiumPanel #weatherMetric::-webkit-scrollbar {
+    display: none;
+  }
+  #weather > .weatherPrimary > .premiumPanel #weatherMetric button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 7px 9px !important;
+    font-size: 11px !important;
+  }
+  #weather .weatherChart {
+    height: 260px !important;
+    min-height: 260px !important;
+    order: 0;
+  }
+  #weather > .weatherPrimary > .weatherHero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    order: 0;
+    min-width: 0;
+  }
+  #weather .weatherNow {
+    padding: 15px !important;
+    border-radius: 16px !important;
+  }
+  #weather .weatherNow .big {
+    font-size: clamp(34px, 9vw, 44px);
+    line-height: 1.1;
+  }
+  #weather .weatherNow p {
+    font-size: 13px;
+    margin: 7px 0;
+  }
+  #weather .weatherNow .insight {
+    padding: 10px !important;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  #weather .forecastBlock {
+    min-width: 0;
+    padding: 11px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--panel);
+  }
+  #weather .forecastBlock h3 {
+    font-size: 15px;
+    margin: 0 0 5px;
+  }
+  #weather .forecastSummary {
+    display: flex !important;
+    gap: 7px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 4px 1px 8px;
+    scrollbar-width: thin;
+  }
+  #weather .forecastDay {
+    flex: 0 0 132px;
+    min-width: 132px;
+    padding: 10px !important;
+    border-radius: 13px;
+    scroll-snap-align: start;
+  }
+  #weather .forecastDay h2 {
+    font-size: 22px;
+    margin: 4px 0;
+  }
+}
+@media (max-width: 650px) {
+  #weather > .weatherPrimary > .weatherHero {
+    display: contents !important;
+  }
+  #weather > .weatherPrimary > .weatherHero > .weatherNow {
+    order: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3px;
+    margin-bottom: 0 !important;
+  }
+  #weather > .weatherPrimary > .premiumPanel {
+    order: 1;
+  }
+  #weather > .weatherPrimary > .weatherHero > .forecastBlock {
+    order: 2;
+    margin-bottom: 0;
+  }
+  #weather .weatherNow .muted {
+    font-size: 12px !important;
+  }
+  #weather .weatherNow .big {
+    font-size: clamp(36px, 10vw, 44px) !important;
+    white-space: nowrap;
+  }
+  #weather .weatherChart {
+    height: 235px !important;
+    min-height: 235px !important;
+  }
+  #weather .forecastDay {
+    flex-basis: 124px;
+    min-width: 124px;
+  }
+  #weather .forecastSummary {
+    margin-right: -3px;
+  }
+}
+
+/* Mobile clarity: compact room readings, useful daily deltas, safe navigation clearance. */
+.homeDailyChanges {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #ffffff05;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.dailyChangeHeading {
+  font-weight: 800;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.homeDailyChanges p {
+  margin: 0;
+  color: var(--muted);
+}
+.dailyChangeRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 0;
+}
+.dailyChangeRow span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dailyChangeRow b {
+  white-space: nowrap;
+  color: var(--a);
+}
+.tariffRangeMode {
+  display: flex;
+  gap: 5px;
+}
+.tariffRangeMode .btn {
+  padding: 7px 10px;
+  font-size: 12px;
+}
+.tariffRangeMode .btn.active {
+  background: linear-gradient(135deg, var(--c1), #bff7ff);
+  color: #071521;
+  font-weight: 800;
+}
+#energy .tariffControls [hidden] {
+  display: none !important;
+}
+@media (max-width: 1050px) {
+  .shell {
+    padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+  }
+  .view.active {
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+  #energy .tariffControls {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    align-items: end;
+  }
+  #energy .tariffRangeMode {
+    grid-column: 1/-1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  #energy .tariffRangeMode .btn {
+    min-width: 0;
+    padding: 8px 6px;
+    font-size: 11px;
+  }
+  #energy .tariffMonthField {
+    grid-column: 1/-1 !important;
+  }
+  #energy .tariffCustomField {
+    grid-column: auto !important;
+  }
+  #energy .tariffControls #tariffApply {
+    grid-column: 1/-1 !important;
+  }
+  #home .compactRooms {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px;
+  }
+  #home .compactRoom {
+    min-width: 0;
+    padding: 7px;
+    border-radius: 11px;
+  }
+  #home .compactRoom .row {
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+  #home .compactRoom .row b {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 10px;
+  }
+  #home .compactRoom .row span {
+    flex: 0 0 auto;
+    font-size: 10px;
+  }
+  #home .compactRoom strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  #home .compactRoom .age {
+    font-size: 9px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #home .compactRoom .compactSpark {
+    height: 30px !important;
+    margin-top: 4px !important;
+  }
+  .homeDailyChanges {
+    margin-top: 6px;
+  }
+}
+@media (max-width: 380px) {
+  #home .compactRooms {
+    grid-template-columns: 1fr !important;
+  }
+  #home .compactRoom .compactSpark {
+    height: 34px !important;
+  }
+}
+
+/* Room mini charts: two columns with adaptive, readable dual scales. */
+@media (max-width: 650px) {
+  #home .compactRooms {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  #home .compactRoom {
+    min-width: 0;
+    padding: 8px !important;
+  }
+  #home .compactRoom .compactSpark {
+    height: 78px !important;
+    margin-top: 6px !important;
+    background: #07112099;
+    border: 1px solid #304663;
+    border-radius: 8px;
+  }
+  #home .compactRoom .compactSpark canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+@media (max-width: 360px) {
+  #home .compactRooms {
+    grid-template-columns: 1fr !important;
+  }
+  #home .compactRoom .compactSpark {
+    height: 86px !important;
+  }
+}
