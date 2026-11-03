@@ -75,6 +75,253 @@ const fmt = (v, d = 1) =>
           "'": "&#39;",
         })[c],
     );
+const kyivPartsFormatter = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Europe/Kyiv",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+function kyivParts(timestamp) {
+  return Object.fromEntries(
+    kyivPartsFormatter
+      .formatToParts(new Date(timestamp))
+      .filter((part) => part.type !== "literal")
+      .map((part) => [part.type, Number(part.value)]),
+  );
+}
+
+function kyivWallTime({ year, month, day, hour = 0, minute = 0 }) {
+  const target = Date.UTC(year, month - 1, day, hour, minute);
+  let guess = target;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const local = kyivParts(guess);
+    guess +=
+      target -
+      Date.UTC(
+        local.year,
+        local.month - 1,
+        local.day,
+        local.hour,
+        local.minute,
+      );
+  }
+  return guess;
+}
+
+function chartLabelTimestamp(value, now = Date.now()) {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  const label = String(value ?? "").trim();
+  if (!label) return NaN;
+  const today = kyivParts(now);
+  const relative = label.match(/^(Сьогодні|Завтра)\s+(\d{1,2}):(\d{2})/i);
+  if (relative) {
+    const offset = relative[1].toLowerCase() === "завтра" ? 1 : 0;
+    const date = new Date(
+      Date.UTC(today.year, today.month - 1, today.day + offset),
+    );
+    return kyivWallTime({
+      year: date.getUTCFullYear(),
+      month: date.getUTCMonth() + 1,
+      day: date.getUTCDate(),
+      hour: Number(relative[2]),
+      minute: Number(relative[3]),
+    });
+  }
+  const fullDate = label.match(
+    /(?:^|\D)(\d{1,2})\.(\d{1,2})\.(\d{4})[, ]+(\d{1,2}):(\d{2})/,
+  );
+  const shortDate = label.match(
+    /(?:^|\D)(\d{1,2})\.(\d{1,2})(?:\D|$)[, ]+(\d{1,2}):(\d{2})/,
+  );
+  if (fullDate)
+    return kyivWallTime({
+      day: Number(fullDate[1]),
+      month: Number(fullDate[2]),
+      year: Number(fullDate[3]),
+      hour: Number(fullDate[4]),
+      minute: Number(fullDate[5]),
+    });
+  if (shortDate)
+    return kyivWallTime({
+      day: Number(shortDate[1]),
+      month: Number(shortDate[2]),
+      year: today.year,
+      hour: Number(shortDate[3]),
+      minute: Number(shortDate[4]),
+    });
+  const normalized = label.includes("T") ? label : label.replace(" ", "T");
+  const parsed = Date.parse(
+    /(?:Z|[+-]\d{2}:?\d{2})$/.test(normalized) ? normalized : normalized + "Z",
+  );
+  return Number.isFinite(parsed) ? parsed : NaN;
+}
+
+function chartTimeline(chart) {
+  const scale = chart.scales.x;
+  if (!scale || !chart.chartArea) return null;
+  if (scale.type === "linear" || scale.type === "time") {
+    const start = Number(scale.min);
+    const end = Number(scale.max);
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start)
+      return null;
+    return {
+      start,
+      end,
+      xAt: (timestamp) => scale.getPixelForValue(timestamp),
+    };
+  }
+  const entries = (chart.data.labels || [])
+    .map((label, index) => ({ index, timestamp: chartLabelTimestamp(label) }))
+    .filter((entry) => Number.isFinite(entry.timestamp));
+  if (entries.length < 2) return null;
+  return {
+    start: entries[0].timestamp,
+    end: entries.at(-1).timestamp,
+    xAt(timestamp) {
+      let right = entries.findIndex((entry) => entry.timestamp >= timestamp);
+      if (right < 0) right = entries.length - 1;
+      if (right === 0) return scale.getPixelForValue(entries[0].index);
+      const before = entries[right - 1];
+      const after = entries[right];
+      const span = after.timestamp - before.timestamp;
+      const ratio = span > 0 ? (timestamp - before.timestamp) / span : 0;
+      return scale.getPixelForValue(before.index + ratio);
+    },
+  };
+}
+
+function kyivCalendarDates(start, end) {
+  const first = kyivParts(start);
+  const last = kyivParts(end);
+  const cursor = new Date(Date.UTC(first.year, first.month - 1, first.day - 1));
+  const finish = Date.UTC(last.year, last.month - 1, last.day + 1);
+  const dates = [];
+  for (let stamp = cursor.getTime(); stamp <= finish; stamp += 86400000) {
+    const date = new Date(stamp);
+    dates.push({
+      year: date.getUTCFullYear(),
+      month: date.getUTCMonth() + 1,
+      day: date.getUTCDate(),
+    });
+  }
+  return dates;
+}
+
+const chartDayMarkers = {
+  id: "chartDayMarkers",
+  beforeDatasetsDraw(chart, _args, options) {
+    if (!options?.tariffBands) return;
+    const timeline = chartTimeline(chart);
+    if (!timeline) return;
+    const settings = state.energyTariffSettings || {};
+    const toMinutes = (value, fallback) => {
+      const match = String(value || fallback).match(/^(\d{1,2}):(\d{2})$/);
+      return match ? Number(match[1]) * 60 + Number(match[2]) : 0;
+    };
+    const dayStart = toMinutes(settings.day_start, "07:00");
+    const nightStart = toMinutes(settings.night_start, "23:00");
+    const boundaries = [timeline.start, timeline.end];
+    for (const date of kyivCalendarDates(timeline.start, timeline.end)) {
+      boundaries.push(kyivWallTime(date));
+      boundaries.push(
+        kyivWallTime({
+          ...date,
+          hour: Math.floor(dayStart / 60),
+          minute: dayStart % 60,
+        }),
+        kyivWallTime({
+          ...date,
+          hour: Math.floor(nightStart / 60),
+          minute: nightStart % 60,
+        }),
+      );
+    }
+    const points = [...new Set(boundaries)]
+      .filter((stamp) => stamp >= timeline.start && stamp <= timeline.end)
+      .sort((a, b) => a - b);
+    const { ctx, chartArea } = chart;
+    ctx.save();
+    for (let i = 0; i < points.length - 1; i++) {
+      const leftTime = points[i];
+      const rightTime = points[i + 1];
+      const midpoint = kyivParts(leftTime + (rightTime - leftTime) / 2);
+      const minuteOfDay = midpoint.hour * 60 + midpoint.minute;
+      const isDay =
+        dayStart < nightStart
+          ? minuteOfDay >= dayStart && minuteOfDay < nightStart
+          : minuteOfDay >= dayStart || minuteOfDay < nightStart;
+      const left = Math.max(chartArea.left, timeline.xAt(leftTime));
+      const right = Math.min(chartArea.right, timeline.xAt(rightTime));
+      if (right <= left) continue;
+      ctx.fillStyle = isDay
+        ? "rgba(88, 225, 255, 0.055)"
+        : "rgba(113, 92, 255, 0.075)";
+      ctx.fillRect(
+        left,
+        chartArea.top,
+        right - left,
+        chartArea.bottom - chartArea.top,
+      );
+      if (right - left >= 54) {
+        ctx.fillStyle = isDay ? "#9cecff99" : "#c2b8ff99";
+        ctx.font = "600 10px Inter,system-ui,sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText(
+          isDay ? "День" : "Ніч",
+          (left + right) / 2,
+          chartArea.top + 4,
+        );
+      }
+    }
+    ctx.restore();
+  },
+  afterDatasetsDraw(chart) {
+    const timeline = chartTimeline(chart);
+    if (!timeline) return;
+    const { ctx, chartArea } = chart;
+    const midnights = kyivCalendarDates(timeline.start, timeline.end)
+      .map((date) => kyivWallTime(date))
+      .filter((stamp) => stamp > timeline.start && stamp < timeline.end);
+    ctx.save();
+    ctx.setLineDash([4, 4]);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(210, 230, 255, 0.42)";
+    ctx.fillStyle = "#dceaff";
+    ctx.font = "600 9px Inter,system-ui,sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    midnights.forEach((timestamp) => {
+      const x = timeline.xAt(timestamp);
+      if (x < chartArea.left || x > chartArea.right) return;
+      ctx.beginPath();
+      ctx.moveTo(x, chartArea.top);
+      ctx.lineTo(x, chartArea.bottom);
+      ctx.stroke();
+      const date = kyivParts(timestamp);
+      const label = `00:00 · ${String(date.day).padStart(2, "0")}.${String(date.month).padStart(2, "0")}`;
+      const width = ctx.measureText(label).width + 8;
+      const labelX = Math.min(
+        chartArea.right - width / 2,
+        Math.max(chartArea.left + width / 2, x),
+      );
+      ctx.setLineDash([]);
+      ctx.fillStyle = "rgba(7, 17, 32, 0.88)";
+      ctx.fillRect(labelX - width / 2, chartArea.top + 2, width, 14);
+      ctx.fillStyle = "#dceaff";
+      ctx.fillText(label, labelX, chartArea.top + 4);
+      ctx.setLineDash([4, 4]);
+    });
+    ctx.restore();
+  },
+};
+
+if (typeof Chart !== "undefined") Chart.register(chartDayMarkers);
+
 async function req(path, opt = {}) {
   const method = opt.method || "GET",
     cacheKey = method + ":" + path,
@@ -447,7 +694,7 @@ function friendlyTime(value) {
     hour12: false,
   }).format(d);
 }
-function dualChart(name, id, labels, datasets) {
+function dualChart(name, id, labels, datasets, chartOptions = {}) {
   const probabilityAxes = new Set(
     (datasets || [])
       .filter(
@@ -480,6 +727,11 @@ function dualChart(name, id, labels, datasets) {
       animation: { duration: 250 },
       interaction: { mode: "index", intersect: false },
       plugins: {
+        chartDayMarkers: {
+          tariffBands:
+            chartOptions.tariffBands ??
+            ["power", "voltage", "homeEnergy"].includes(name),
+        },
         legend: {
           display: name !== "climate",
           labels: {
@@ -1061,8 +1313,6 @@ function renderRoomSparks(cards) {
       times = labels.map(climateUtcMs).filter(Number.isFinite),
       timeStart = times.length ? Math.min(...times) : Date.now() - 86400000,
       timeEnd = times.length ? Math.max(...times) : Date.now(),
-      tickHours = canvas.getBoundingClientRect().width >= 300 ? 3 : 6,
-      tickMs = tickHours * 3600000,
       tempRange = extent(temperature, 3, [-30, 60]),
       humidityRange = extent(humidity, 12, [0, 100]),
       toPoints = (values) =>
@@ -1182,23 +1432,16 @@ function renderRoomSparks(cards) {
             min: timeStart,
             max: timeEnd,
             ticks: {
-              stepSize: tickMs,
-              autoSkip: false,
+              maxTicksLimit: window.innerWidth <= 650 ? 5 : 9,
+              autoSkip: true,
               maxRotation: 0,
               minRotation: 0,
               color: "#91a4c4",
-              font: { size: 8 },
+              font: { size: window.innerWidth <= 650 ? 9 : 10 },
               padding: 2,
               callback: (value) => {
-                const n = Number(value);
-                if (Math.abs(n - timeStart) < 60000) return "−24 год";
-                if (Math.abs(n - timeEnd) < 60000) return "зараз";
-                return new Intl.DateTimeFormat("uk-UA", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                  timeZone: "Europe/Kyiv",
-                }).format(new Date(n));
+                const local = kyivParts(Number(value));
+                return `${String(local.hour).padStart(2, "0")}:${String(local.minute).padStart(2, "0")}`;
               },
             },
             grid: { display: false },
@@ -1914,33 +2157,39 @@ function renderCharts() {
       cost,
       cumC,
     );
-    dualChart("power", "powerChart", labels, [
-      {
-        label: "Накопичена енергія, кВт·год",
-        data: cumE,
-        borderColor: "#58e1ff",
-        type: "line",
-        yAxisID: "y",
-      },
-      {
-        label: "Денний тариф",
-        data: split.day,
-        borderColor: "#58e1ff",
-        backgroundColor: "#58e1ffbb",
-        type: "bar",
-        yAxisID: "y1",
-        stack: "tariff-cost",
-      },
-      {
-        label: "Нічний тариф",
-        data: split.night,
-        borderColor: "#715cff",
-        backgroundColor: "#715cffbb",
-        type: "bar",
-        yAxisID: "y1",
-        stack: "tariff-cost",
-      },
-    ]);
+    dualChart(
+      "power",
+      "powerChart",
+      labels,
+      [
+        {
+          label: "Накопичена енергія, кВт·год",
+          data: cumE,
+          borderColor: "#58e1ff",
+          type: "line",
+          yAxisID: "y",
+        },
+        {
+          label: "Денний тариф",
+          data: split.day,
+          borderColor: "#58e1ff",
+          backgroundColor: "#58e1ffbb",
+          type: "bar",
+          yAxisID: "y1",
+          stack: "tariff-cost",
+        },
+        {
+          label: "Нічний тариф",
+          data: split.night,
+          borderColor: "#715cff",
+          backgroundColor: "#715cffbb",
+          type: "bar",
+          yAxisID: "y1",
+          stack: "tariff-cost",
+        },
+      ],
+      { tariffBands: true },
+    );
   } else
     dualChart("power", "powerChart", labels, [
       {
@@ -1997,33 +2246,39 @@ function renderCharts() {
       cost2,
       cumC2,
     );
-    dualChart("voltage", "voltageChart", labels2, [
-      {
-        label: "Накопичена енергія, кВт·год",
-        data: cumE2,
-        borderColor: "#58e1ff",
-        type: "line",
-        yAxisID: "y",
-      },
-      {
-        label: "Денний тариф",
-        data: split.day,
-        borderColor: "#58e1ff",
-        backgroundColor: "#58e1ffbb",
-        type: "bar",
-        yAxisID: "y1",
-        stack: "tariff-cost",
-      },
-      {
-        label: "Нічний тариф",
-        data: split.night,
-        borderColor: "#715cff",
-        backgroundColor: "#715cffbb",
-        type: "bar",
-        yAxisID: "y1",
-        stack: "tariff-cost",
-      },
-    ]);
+    dualChart(
+      "voltage",
+      "voltageChart",
+      labels2,
+      [
+        {
+          label: "Накопичена енергія, кВт·год",
+          data: cumE2,
+          borderColor: "#58e1ff",
+          type: "line",
+          yAxisID: "y",
+        },
+        {
+          label: "Денний тариф",
+          data: split.day,
+          borderColor: "#58e1ff",
+          backgroundColor: "#58e1ffbb",
+          type: "bar",
+          yAxisID: "y1",
+          stack: "tariff-cost",
+        },
+        {
+          label: "Нічний тариф",
+          data: split.night,
+          borderColor: "#715cff",
+          backgroundColor: "#715cffbb",
+          type: "bar",
+          yAxisID: "y1",
+          stack: "tariff-cost",
+        },
+      ],
+      { tariffBands: true },
+    );
   }
   const colors = [
       "#ff9f43",
@@ -2140,12 +2395,6 @@ function renderCharts() {
     xMax = allPoints.length
       ? allPoints.reduce((a, b) => Math.max(a, b), -Infinity)
       : undefined,
-    timeFmt = new Intl.DateTimeFormat("uk-UA", {
-      day: "2-digit",
-      month: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    }),
     renderClimateLine = (key, id, datasets, min, max, unit) => {
       const canvas = $(id);
       if (!canvas || typeof Chart === "undefined") return;
@@ -2266,10 +2515,13 @@ function renderCharts() {
               max: xMax,
               ticks: {
                 color: "#d2deee",
-                maxTicksLimit: window.innerWidth <= 650 ? 4 : 8,
+                maxTicksLimit: window.innerWidth <= 650 ? 5 : 9,
                 maxRotation: 0,
                 font: { size: window.innerWidth <= 650 ? 10 : 12 },
-                callback: (v) => timeFmt.format(new Date(Number(v))),
+                callback: (v) => {
+                  const local = kyivParts(Number(v));
+                  return `${String(local.hour).padStart(2, "0")}:${String(local.minute).padStart(2, "0")}`;
+                },
               },
               grid: { color: "#ffffff18" },
             },
