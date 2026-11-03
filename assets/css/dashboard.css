@@ -3379,6 +3379,9 @@ body {
     min-height: min(360px, calc(100dvh - 150px));
     max-height: calc(100dvh - 150px - env(safe-area-inset-top));
   }
+  .assistantForm textarea {
+    font-size: 16px;
+  }
 }
 @media (min-width: 1051px) {
   .overviewKpis {
