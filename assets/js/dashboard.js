@@ -1397,14 +1397,26 @@ function renderRoomSparks(cards) {
       state.homeClimate24?.datasets || state.climate?.datasets || {},
     keys = Object.keys(climate),
     extent = (values, minSpan, bounds) => {
-      const nums = (values || []).map(Number).filter(Number.isFinite);
+      const nums = (values || [])
+        .map(Number)
+        .filter(
+          (value) =>
+            Number.isFinite(value) && value >= bounds[0] && value <= bounds[1],
+        )
+        .sort((a, b) => a - b);
       if (!nums.length) return bounds;
-      const lo = Math.min(...nums),
-        hi = Math.max(...nums),
+      const percentile = (p) => {
+          const position = (nums.length - 1) * p,
+            lower = Math.floor(position),
+            upper = Math.ceil(position);
+          return nums[lower] + (nums[upper] - nums[lower]) * (position - lower);
+        },
+        lo = nums.length >= 12 ? percentile(0.08) : nums[0],
+        hi = nums.length >= 12 ? percentile(0.92) : nums.at(-1),
         center = (lo + hi) / 2,
         span = Math.min(
           bounds[1] - bounds[0],
-          Math.max(minSpan, (hi - lo) * 1.4 + minSpan * 0.12),
+          Math.max(minSpan, (hi - lo) * 1.45 + minSpan * 0.25),
         );
       let min = Math.max(bounds[0], center - span / 2),
         max = Math.min(bounds[1], center + span / 2);
@@ -1432,13 +1444,17 @@ function renderRoomSparks(cards) {
       times = labels.map(climateUtcMs).filter(Number.isFinite),
       timeStart = times.length ? Math.min(...times) : Date.now() - 86400000,
       timeEnd = times.length ? Math.max(...times) : Date.now(),
-      tempRange = extent(temperature, 3, [-30, 60]),
-      humidityRange = extent(humidity, 12, [0, 100]),
-      toPoints = (values) =>
+      tempRange = extent(temperature, 1.6, [-30, 60]),
+      humidityRange = extent(humidity, 7, [0, 100]),
+      toPoints = (values, range) =>
         values
           .map((value, index) => ({
             x: climateUtcMs(labels[index]),
-            y: value == null ? null : Number(value),
+            y:
+              value == null
+                ? null
+                : Math.max(range[0], Math.min(range[1], Number(value))),
+            actualY: value == null ? null : Number(value),
           }))
           .filter(
             (point) =>
@@ -1452,29 +1468,43 @@ function renderRoomSparks(cards) {
         datasets: [
           {
             label: "Температура, °C",
-            data: toPoints(temperature),
+            data: toPoints(temperature, tempRange),
             borderColor: color,
             backgroundColor: color + "18",
             yAxisID: "y",
             fill: false,
             tension: 0.24,
             spanGaps: false,
-            pointRadius: 0,
-            pointHoverRadius: 3,
+            pointRadius: (context) => {
+              const value = context.raw?.actualY;
+              return value != null &&
+                (value < tempRange[0] || value > tempRange[1])
+                ? 2.5
+                : 0;
+            },
+            pointStyle: "triangle",
+            pointHoverRadius: 4,
             borderWidth: 2.2,
             order: 1,
           },
           {
             label: "Вологість, %",
-            data: toPoints(humidity),
+            data: toPoints(humidity, humidityRange),
             borderColor: "#bd83ff",
             backgroundColor: "#bd83ff18",
             yAxisID: "y1",
             fill: false,
             tension: 0.24,
             spanGaps: false,
-            pointRadius: 0,
-            pointHoverRadius: 3,
+            pointRadius: (context) => {
+              const value = context.raw?.actualY;
+              return value != null &&
+                (value < humidityRange[0] || value > humidityRange[1])
+                ? 2.5
+                : 0;
+            },
+            pointStyle: "triangle",
+            pointHoverRadius: 4,
             borderWidth: 2,
             order: 2,
           },
@@ -1523,7 +1553,7 @@ function renderRoomSparks(cards) {
                       "<div>" +
                       esc(p.dataset.label) +
                       ": <b>" +
-                      fmt(p.raw?.y ?? p.raw) +
+                      fmt(p.raw?.actualY ?? p.raw?.y ?? p.raw) +
                       "</b></div>",
                   )
                   .join("");
@@ -1555,7 +1585,7 @@ function renderRoomSparks(cards) {
               maxRotation: 0,
               minRotation: 0,
               color: "#91a4c4",
-              font: { size: window.innerWidth <= 650 ? 9 : 10 },
+              font: { size: window.innerWidth <= 650 ? 9 : 8 },
               padding: 2,
               callback: (value) => {
                 const local = kyivParts(Number(value));
@@ -1584,14 +1614,14 @@ function renderRoomSparks(cards) {
               display: true,
               text: "°C",
               color: "#b9c8dd",
-              font: { size: 9, weight: "700" },
+              font: { size: window.innerWidth <= 650 ? 9 : 8, weight: "700" },
             },
             grid: { color: "#ffffff16", drawTicks: false },
             border: { display: false },
             ticks: {
               maxTicksLimit: 4,
               color: "#d3deed",
-              font: { size: 9, weight: "600" },
+              font: { size: window.innerWidth <= 650 ? 9 : 8, weight: "600" },
               padding: 3,
             },
           },
@@ -1604,14 +1634,14 @@ function renderRoomSparks(cards) {
               display: true,
               text: "%",
               color: "#d2b9ff",
-              font: { size: 9, weight: "700" },
+              font: { size: window.innerWidth <= 650 ? 9 : 8, weight: "700" },
             },
             grid: { drawOnChartArea: false, drawTicks: false },
             border: { display: false },
             ticks: {
               maxTicksLimit: 4,
               color: "#d9caff",
-              font: { size: 9, weight: "600" },
+              font: { size: window.innerWidth <= 650 ? 9 : 8, weight: "600" },
               padding: 3,
             },
           },

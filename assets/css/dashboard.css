@@ -2547,8 +2547,13 @@ body {
 
 /* Small room charts: show compact, fixed scales and 24-hour endpoints. */
 @media (min-width: 1051px) {
+  .compactRoom strong {
+    font-size: 14px;
+  }
   .compactRoom .compactSpark {
-    height: 54px !important;
+    height: 82px !important;
+  }
+  .compactRoom .compactSpark {
     margin-top: 6px !important;
     background: #071120a8;
     border: 1px solid #263b59;
