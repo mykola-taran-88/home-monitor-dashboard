@@ -200,9 +200,9 @@ function kyivCalendarDates(start, end) {
   return dates;
 }
 
-function timeAxisTicks(start, end, width) {
+function timeAxisTicks(start, end, width, slotWidth = 60, gapWidth = 58) {
   const rangeHours = Math.max(1, (end - start) / 3600000);
-  const slots = Math.max(3, Math.floor(width / 60));
+  const slots = Math.max(3, Math.floor(width / slotWidth));
   const targetHours = rangeHours / slots;
   const intervals = [1, 2, 3, 4, 6, 8, 12, 24, 48, 72, 168, 336, 720, 2160];
   const intervalHours = intervals.find((hours) => hours >= targetHours) || 2160;
@@ -227,7 +227,7 @@ function timeAxisTicks(start, end, width) {
 
   const ordered = [...new Set(values)].sort((a, b) => a - b);
   const chartWidth = Math.max(120, Number(width) || 500);
-  const minimumGap = ((end - start) * 58) / chartWidth;
+  const minimumGap = ((end - start) * gapWidth) / chartWidth;
   const ticks = [start];
   for (const value of ordered.slice(1, -1)) {
     if (
@@ -1589,6 +1589,7 @@ function renderRoomSparks(cards) {
               padding: 2,
               callback: (value) => {
                 const local = kyivParts(Number(value));
+                if (local.hour === 0 && local.minute === 0) return "";
                 return `${String(local.hour).padStart(2, "0")}:${String(local.minute).padStart(2, "0")}`;
               },
             },
@@ -1597,9 +1598,16 @@ function renderRoomSparks(cards) {
                 timeStart,
                 timeEnd,
                 scale.width || canvas.clientWidth || 500,
+                48,
+                42,
               ).map((value) => ({ value }));
             },
-            grid: { display: false },
+            grid: {
+              display: true,
+              drawOnChartArea: false,
+              drawTicks: true,
+              tickLength: 4,
+            },
             border: { display: false },
             afterFit: (scale) => {
               scale.height = Math.max(scale.height, 25);
