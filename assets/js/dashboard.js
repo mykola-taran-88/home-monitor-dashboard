@@ -640,12 +640,17 @@ async function loadPeriod(scope, p, force = false) {
     root?.classList.add("loading");
     if (p === "day") {
       const hours = 24;
-      const [pw, cl] = await Promise.all([
+      const [pw, cl, recentClimate] = await Promise.all([
         req(`/charts/power?hours=${hours}`, { ttl: force ? 0 : 300000 }),
         req(`/charts/climate?hours=${hours}`, { ttl: force ? 0 : 300000 }),
+        scope === "climate"
+          ? req("/charts/climate?hours=6", { ttl: force ? 0 : 60000 })
+          : Promise.resolve(null),
       ]);
       state.power = pw;
-      state.climate = cl;
+      state.climate = recentClimate
+        ? mergeRecentClimate(cl, recentClimate)
+        : cl;
     } else {
       const a = await req(`/analytics/range?from=${fr}&to=${to}`, {
         ttl: force ? 0 : 900000,
