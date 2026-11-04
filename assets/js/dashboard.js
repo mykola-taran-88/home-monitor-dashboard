@@ -310,7 +310,7 @@ const chartDayMarkers = {
     }
     ctx.restore();
   },
-  afterDatasetsDraw(chart) {
+  afterDatasetsDraw(chart, _args, options) {
     const timeline = chartTimeline(chart);
     if (!timeline) return;
     const { ctx, chartArea } = chart;
@@ -332,18 +332,20 @@ const chartDayMarkers = {
       ctx.moveTo(x, chartArea.top);
       ctx.lineTo(x, chartArea.bottom);
       ctx.stroke();
-      const date = kyivParts(timestamp);
-      const label = `00:00 · ${String(date.day).padStart(2, "0")}.${String(date.month).padStart(2, "0")}`;
-      const width = ctx.measureText(label).width + 8;
-      const labelX = Math.min(
-        chartArea.right - width / 2,
-        Math.max(chartArea.left + width / 2, x),
-      );
-      ctx.setLineDash([]);
-      ctx.fillStyle = "rgba(7, 17, 32, 0.88)";
-      ctx.fillRect(labelX - width / 2, chartArea.top + 2, width, 14);
-      ctx.fillStyle = "#dceaff";
-      ctx.fillText(label, labelX, chartArea.top + 4);
+      if (options?.showMidnightLabel !== false) {
+        const date = kyivParts(timestamp);
+        const label = `00:00 · ${String(date.day).padStart(2, "0")}.${String(date.month).padStart(2, "0")}`;
+        const width = ctx.measureText(label).width + 8;
+        const labelX = Math.min(
+          chartArea.right - width / 2,
+          Math.max(chartArea.left + width / 2, x),
+        );
+        ctx.setLineDash([]);
+        ctx.fillStyle = "rgba(7, 17, 32, 0.88)";
+        ctx.fillRect(labelX - width / 2, chartArea.top + 2, width, 14);
+        ctx.fillStyle = "#dceaff";
+        ctx.fillText(label, labelX, chartArea.top + 4);
+      }
       ctx.setLineDash([4, 4]);
     });
     if (
@@ -1517,6 +1519,7 @@ function renderRoomSparks(cards) {
         interaction: { mode: "nearest", axis: "x", intersect: false },
         plugins: {
           legend: { display: false },
+          chartDayMarkers: { showMidnightLabel: false },
           tooltip: {
             enabled: false,
             external: ({ chart, tooltip }) => {
