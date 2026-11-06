@@ -1157,15 +1157,15 @@ function renderHomeClimateHighlights(devices, dashboard) {
 
   const cards = [
     {
-      title: "🏠 У середньому вдома",
+      title: "🏠 Середнє вдома",
       value: metricText(avgTemperature, avgHumidity),
       detail: indoor.length
-        ? `За ${indoor.length} актуальн. датч.`
+        ? `${indoor.length} актуальн. датч.`
         : "Немає актуальних даних",
       type: "indoor",
     },
     {
-      title: "🌳 Надворі · датчик",
+      title: "🌳 Вуличний датчик",
       value: outdoor ? metricText(outdoor.temperature, outdoor.humidity) : "—",
       detail: outdoor
         ? `${outdoor.online ? "Актуально" : "Дані застаріли"} · ${age}`
@@ -1173,7 +1173,7 @@ function renderHomeClimateHighlights(devices, dashboard) {
       type: "outdoor",
     },
     {
-      title: "🌦 Надворі · прогноз",
+      title: "🌦 Прогноз погоди",
       value: forecast
         ? metricText(forecast.temperature, forecast.humidity)
         : "—",
@@ -1200,7 +1200,7 @@ function renderHomeClimateHighlights(devices, dashboard) {
     const signed = (value) => `${value > 0 ? "+" : ""}${fmt(value)}°`,
       humidityDelta = avgHumidity - Number(outdoor.humidity);
     notes.push(
-      `У квартирі ${signed(avgTemperature - Number(outdoor.temperature))} · вологість ${humidityDelta > 0 ? "+" : ""}${fmt(humidityDelta, 0)} п.п. відносно вулиці`,
+      `Удома ${signed(avgTemperature - Number(outdoor.temperature))} · вологість ${humidityDelta > 0 ? "+" : ""}${fmt(humidityDelta, 0)} п.п. від вулиці`,
     );
   }
   if (
@@ -1213,12 +1213,12 @@ function renderHomeClimateHighlights(devices, dashboard) {
     hasValue(outdoor.humidity)
   ) {
     notes.push(
-      `Розбіжність прогнозу з датчиком: ${fmt(Math.abs(Number(forecast.temperature) - Number(outdoor.temperature)))}°C · ${fmt(Math.abs(Number(forecast.humidity) - Number(outdoor.humidity)), 0)} п.п.`,
+      `Прогноз ↔ датчик: Δ${fmt(Math.abs(Number(forecast.temperature) - Number(outdoor.temperature)))}° · ${fmt(Math.abs(Number(forecast.humidity) - Number(outdoor.humidity)), 0)} п.п.`,
     );
   }
-  analysis.textContent = notes.length
-    ? notes.join("  ·  ")
-    : "Порівняння з’явиться, коли будуть актуальні дані кімнатного та вуличного датчиків.";
+  analysis.innerHTML = notes.length
+    ? notes.map((note) => `<span>${esc(note)}</span>`).join("")
+    : "<span>Порівняння з’явиться після оновлення датчиків.</span>";
 }
 function renderDevices(o, d) {
   const el = $("devicesGrid");

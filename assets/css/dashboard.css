@@ -2512,10 +2512,15 @@ body {
     right: 14px;
     bottom: 12px;
     width: 52%;
+    display: grid;
+    gap: 2px;
     overflow: hidden;
     color: #a8bdd8;
     font-size: 11px;
-    line-height: 1.35;
+    line-height: 1.2;
+  }
+  .homeClimateAnalysis span {
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
