@@ -2469,7 +2469,7 @@ body {
   }
   .homeClimateHighlight {
     min-width: 0;
-    padding: 9px 10px;
+    padding: 11px 12px;
     border: 1px solid #6ee7ff2b;
     border-radius: 12px;
     background: linear-gradient(145deg, #14233aee, #0b1526e8);
@@ -2484,19 +2484,19 @@ body {
   }
   .homeClimateHighlight b {
     color: #b7c8df;
-    font-size: 11px;
-    line-height: 1.3;
+    font-size: 12px;
+    line-height: 1.35;
   }
   .homeClimateHighlight strong {
-    margin-top: 5px;
+    margin-top: 7px;
     color: #f1f6ff;
-    font-size: 17px;
+    font-size: 20px;
     line-height: 1.2;
   }
   .homeClimateHighlight small {
-    margin-top: 4px;
+    margin-top: 5px;
     color: #8fa4c5;
-    font-size: 10px;
+    font-size: 11px;
   }
   .homeClimateHighlight.indoor strong {
     color: #68e4ff;
@@ -2583,10 +2583,8 @@ body {
     padding: 7px 9px;
     font-size: 11px;
     line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    display: block;
+    overflow: visible;
   }
   .overviewKpis {
     align-self: stretch;
