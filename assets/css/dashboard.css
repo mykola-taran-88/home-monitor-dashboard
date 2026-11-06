@@ -4269,3 +4269,75 @@ body {
     height: 86px !important;
   }
 }
+
+/* Keep the home hero and climate highlights readable on phones. */
+@media (max-width: 650px) {
+  #home .statusCompact {
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  #home .statusCompact #statusPill {
+    align-self: flex-start;
+  }
+  #home .statusCompact #heroTitle,
+  #home .statusCompact #heroText,
+  #home .statusCompact .heroQuick,
+  #home .homeClimateHighlights,
+  #home .homeClimateAnalysis {
+    position: static;
+    width: 100%;
+    max-width: none;
+    grid-column: auto;
+    grid-row: auto;
+    transform: none;
+  }
+  #home .statusCompact #heroText {
+    display: block;
+    overflow: visible;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  #home .heroQuick {
+    justify-content: flex-start;
+    align-self: auto;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  #home .homeClimateHighlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+  }
+  #home .homeClimateHighlight {
+    padding: 9px 10px;
+  }
+  #home .homeClimateHighlight.forecast {
+    grid-column: 1/-1;
+  }
+  #home .homeClimateHighlight b,
+  #home .homeClimateHighlight small {
+    white-space: normal;
+  }
+  #home .homeClimateHighlight b {
+    font-size: 12px;
+  }
+  #home .homeClimateHighlight strong {
+    font-size: 17px;
+  }
+  #home .homeClimateHighlight small {
+    font-size: 11px;
+  }
+  #home .homeClimateAnalysis {
+    display: grid;
+    gap: 3px;
+    overflow: visible;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  #home .homeClimateAnalysis span {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+}
