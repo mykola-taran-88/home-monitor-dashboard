@@ -2447,6 +2447,79 @@ body {
 #climate .planReadout {
   filter: drop-shadow(0 2px 3px #02081799);
 }
+@media (min-width: 1051px) {
+  #home .statusCompact {
+    position: relative;
+    overflow: hidden;
+  }
+  #home .statusCompact #statusPill,
+  #home .statusCompact #heroTitle,
+  #home .statusCompact #heroText,
+  #home .statusCompact .heroQuick {
+    max-width: 44%;
+  }
+  .homeClimateHighlights {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 52%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+  .homeClimateHighlight {
+    min-width: 0;
+    padding: 9px 10px;
+    border: 1px solid #6ee7ff2b;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #14233aee, #0b1526e8);
+  }
+  .homeClimateHighlight b,
+  .homeClimateHighlight strong,
+  .homeClimateHighlight small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .homeClimateHighlight b {
+    color: #b7c8df;
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  .homeClimateHighlight strong {
+    margin-top: 5px;
+    color: #f1f6ff;
+    font-size: 17px;
+    line-height: 1.2;
+  }
+  .homeClimateHighlight small {
+    margin-top: 4px;
+    color: #8fa4c5;
+    font-size: 10px;
+  }
+  .homeClimateHighlight.indoor strong {
+    color: #68e4ff;
+  }
+  .homeClimateHighlight.outdoor strong {
+    color: #40dda5;
+  }
+  .homeClimateHighlight.forecast strong {
+    color: #c6b2ff;
+  }
+  .homeClimateAnalysis {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    width: 52%;
+    overflow: hidden;
+    color: #a8bdd8;
+    font-size: 11px;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
 #climate .planReadout rect {
   fill: #07182bef !important;
   stroke: #b8d5eb !important;

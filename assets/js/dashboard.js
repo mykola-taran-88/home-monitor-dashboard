@@ -1103,6 +1103,123 @@ const ageText = (m) =>
       : m < 60
         ? m + " хв тому"
         : Math.floor(m / 60) + " год " + (m % 60) + " хв тому";
+function forecastTimestamp(value) {
+  const match = String(value || "").match(
+    /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/,
+  );
+  return match
+    ? kyivWallTime({
+        year: Number(match[1]),
+        month: Number(match[2]),
+        day: Number(match[3]),
+        hour: Number(match[4]),
+        minute: Number(match[5]),
+      })
+    : NaN;
+}
+function renderHomeClimateHighlights(devices, dashboard) {
+  const host = $("homeClimateHighlights"),
+    analysis = $("homeClimateAnalysis");
+  if (!host || !analysis) return;
+  const hasValue = (value) =>
+      value != null && value !== "" && Number.isFinite(Number(value)),
+    indoor = devices.filter(
+      (device) =>
+        !device.is_outdoor &&
+        device.online &&
+        hasValue(device.temperature) &&
+        hasValue(device.humidity),
+    ),
+    outdoor = devices.find((device) => device.is_outdoor),
+    avgTemperature = indoor.length
+      ? indoor.reduce((sum, device) => sum + Number(device.temperature), 0) /
+        indoor.length
+      : null,
+    avgHumidity = indoor.length
+      ? indoor.reduce((sum, device) => sum + Number(device.humidity), 0) /
+        indoor.length
+      : null,
+    weatherRows = (dashboard?.weather?.hourly_3h || [])
+      .map((row) => ({
+        ...row,
+        timestamp: forecastTimestamp(row.forecast_time),
+      }))
+      .filter((row) => Number.isFinite(row.timestamp))
+      .sort((a, b) => a.timestamp - b.timestamp),
+    now = Date.now(),
+    forecast =
+      weatherRows.find((row) => row.timestamp >= now - 30 * 60000) || null,
+    metricText = (temperature, humidity) =>
+      hasValue(temperature) && hasValue(humidity)
+        ? `${fmt(temperature)}°C · ${fmt(humidity, 0)}%`
+        : "—",
+    age = outdoor ? ageText(outdoor.age_minutes) : "немає датчика";
+
+  const cards = [
+    {
+      title: "🏠 У середньому вдома",
+      value: metricText(avgTemperature, avgHumidity),
+      detail: indoor.length
+        ? `За ${indoor.length} актуальн. датч.`
+        : "Немає актуальних даних",
+      type: "indoor",
+    },
+    {
+      title: "🌳 Надворі · датчик",
+      value: outdoor ? metricText(outdoor.temperature, outdoor.humidity) : "—",
+      detail: outdoor
+        ? `${outdoor.online ? "Актуально" : "Дані застаріли"} · ${age}`
+        : "Датчик не налаштовано",
+      type: "outdoor",
+    },
+    {
+      title: "🌦 Надворі · прогноз",
+      value: forecast
+        ? metricText(forecast.temperature, forecast.humidity)
+        : "—",
+      detail: forecast
+        ? `Прогноз на ${String(forecast.forecast_time).slice(11, 16)}`
+        : "Прогноз недоступний",
+      type: "forecast",
+    },
+  ];
+  host.innerHTML = cards
+    .map(
+      (card) =>
+        `<div class="homeClimateHighlight ${card.type}"><b>${card.title}</b><strong>${card.value}</strong><small>${esc(card.detail)}</small></div>`,
+    )
+    .join("");
+
+  const notes = [];
+  if (
+    indoor.length &&
+    outdoor?.online &&
+    hasValue(outdoor.temperature) &&
+    hasValue(outdoor.humidity)
+  ) {
+    const signed = (value) => `${value > 0 ? "+" : ""}${fmt(value)}°`,
+      humidityDelta = avgHumidity - Number(outdoor.humidity);
+    notes.push(
+      `У квартирі ${signed(avgTemperature - Number(outdoor.temperature))} · вологість ${humidityDelta > 0 ? "+" : ""}${fmt(humidityDelta, 0)} п.п. відносно вулиці`,
+    );
+  }
+  if (
+    forecast &&
+    forecast.timestamp - now <= 90 * 60000 &&
+    outdoor?.online &&
+    hasValue(forecast.temperature) &&
+    hasValue(forecast.humidity) &&
+    hasValue(outdoor.temperature) &&
+    hasValue(outdoor.humidity)
+  ) {
+    notes.push(
+      `Розбіжність прогнозу з датчиком: ${fmt(Math.abs(Number(forecast.temperature) - Number(outdoor.temperature)))}°C · ${fmt(Math.abs(Number(forecast.humidity) - Number(outdoor.humidity)), 0)} п.п.`,
+    );
+  }
+  analysis.textContent = notes.length
+    ? notes.join("  ·  ")
+    : "Порівняння з’явиться, коли будуть актуальні дані кімнатного та вуличного датчиків.";
+}
 function renderDevices(o, d) {
   const el = $("devicesGrid");
   if (!el) return [];
@@ -1224,6 +1341,7 @@ function renderOverviewCompact(o, d, devices) {
         : ""),
   );
   renderHomeDailyChanges(rooms);
+  renderHomeClimateHighlights(devices, d);
   renderRoomSparks(cards);
   renderHomeEnergy();
   const recs = o.recommendations || d.recommendations || [],
